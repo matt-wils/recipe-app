@@ -20,7 +20,7 @@ export function RecipeForm({ initial, initialPhoto, onSubmit }: RecipeFormProps)
   const [ingredients, setIngredients] = useState<Ingredient[]>(
     initial?.ingredients.length ? initial.ingredients : [emptyIngredient()],
   );
-  const [stepsText, setStepsText] = useState((initial?.steps ?? []).join('\n'));
+  const [notes, setNotes] = useState(initial?.notes ?? '');
   const [tagsText, setTagsText] = useState((initial?.tags ?? []).join(', '));
   const [photo, setPhoto] = useState<string | undefined>(initialPhoto);
   const [error, setError] = useState('');
@@ -48,10 +48,7 @@ export function RecipeForm({ initial, initialPhoto, onSubmit }: RecipeFormProps)
       id: initial?.id ?? crypto.randomUUID(),
       name: trimmedName,
       ingredients: cleanIngredients,
-      steps: stepsText
-        .split('\n')
-        .map((s) => s.trim())
-        .filter(Boolean),
+      notes: notes.trim(),
       tags: tagsText
         .split(',')
         .map((t) => t.trim().toLowerCase())
@@ -97,7 +94,7 @@ export function RecipeForm({ initial, initialPhoto, onSubmit }: RecipeFormProps)
       </Field>
 
       <Field label="Ingredients">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4">
           {ingredients.map((ing, i) => (
             <IngredientRow
               key={i}
@@ -117,13 +114,13 @@ export function RecipeForm({ initial, initialPhoto, onSubmit }: RecipeFormProps)
         </div>
       </Field>
 
-      <Field label="Steps (one per line)">
+      <Field label="Notes">
         <Textarea
-          aria-label="Steps"
+          aria-label="Notes"
           rows={6}
-          value={stepsText}
-          onChange={(e) => setStepsText(e.target.value)}
-          placeholder={'Preheat oven…\nMix dry ingredients…'}
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          placeholder={'Anything worth remembering — tips, swaps, timing…'}
         />
       </Field>
 

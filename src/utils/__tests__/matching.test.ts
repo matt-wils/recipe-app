@@ -9,7 +9,7 @@ function recipe(name: string, ingredientNames: string[]): Recipe {
     id: `r${idCounter}`,
     name,
     ingredients: ingredientNames.map((n) => ({ name: n, amount: 1, unit: '' })),
-    steps: [],
+    notes: '',
     tags: [],
     servings: 1,
     hasPhoto: false,

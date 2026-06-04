@@ -8,7 +8,7 @@ export interface Recipe {
   id: string; // crypto.randomUUID()
   name: string;
   ingredients: Ingredient[];
-  steps: string[];
+  notes: string;
   tags: string[];
   servings: number;
   hasPhoto: boolean; // flag only; photo bytes live in the `photos` store

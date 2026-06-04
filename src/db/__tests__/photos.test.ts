@@ -20,7 +20,7 @@ describe('photos db', () => {
       id: 'r2',
       name: 'With Photo',
       ingredients: [],
-      steps: [],
+      notes: '',
       tags: [],
       servings: 1,
       hasPhoto: true,

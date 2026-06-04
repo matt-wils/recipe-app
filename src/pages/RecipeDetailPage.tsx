@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Pencil, Trash2 } from 'lucide-react';
 import { PageHeader } from '../components/layout/PageHeader';
 import { ServingScaler } from '../components/recipe/ServingScaler';
-import { StepList } from '../components/recipe/StepList';
+import { NotesView } from '../components/recipe/NotesView';
 import { TagPill } from '../components/ui/TagPill';
 import { Button } from '../components/ui/Button';
 import { Modal } from '../components/ui/Modal';
@@ -94,8 +94,8 @@ export function RecipeDetailPage() {
         </section>
 
         <section>
-          <h2 className="mb-2 text-lg font-semibold">Steps</h2>
-          <StepList steps={recipe.steps} />
+          <h2 className="mb-2 text-lg font-semibold">Notes</h2>
+          <NotesView notes={recipe.notes} />
         </section>
       </div>
 

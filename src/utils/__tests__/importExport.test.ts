@@ -7,7 +7,7 @@ function recipe(id: string, name = 'R'): Recipe {
     id,
     name,
     ingredients: [{ name: 'flour', amount: 1, unit: 'cup' }],
-    steps: ['mix'],
+    notes: 'mix',
     tags: [],
     servings: 2,
     hasPhoto: false,

@@ -7,7 +7,7 @@ function recipe(name: string, createdAt: number, tags: string[] = []): Recipe {
     id: name,
     name,
     ingredients: [],
-    steps: [],
+    notes: '',
     tags,
     servings: 1,
     hasPhoto: false,

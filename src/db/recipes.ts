@@ -1,14 +1,30 @@
 import { getDb, RECIPES_STORE, PHOTOS_STORE } from './client';
 import type { Recipe } from '../types';
 
+/**
+ * Upgrade legacy records on read: pre-Notes recipes stored `steps: string[]`
+ * instead of `notes: string`. Join the old steps into a single notes block.
+ */
+export function normalizeRecipe(raw: Recipe): Recipe {
+  if (typeof raw.notes === 'string') return raw;
+  const legacy = raw as Recipe & { steps?: unknown };
+  const { steps, ...rest } = legacy;
+  return {
+    ...rest,
+    notes: Array.isArray(steps) ? steps.join('\n') : '',
+  };
+}
+
 export async function getAllRecipes(): Promise<Recipe[]> {
   const db = await getDb();
-  return db.getAll(RECIPES_STORE);
+  const recipes = await db.getAll(RECIPES_STORE);
+  return recipes.map(normalizeRecipe);
 }
 
 export async function getRecipe(id: string): Promise<Recipe | undefined> {
   const db = await getDb();
-  return db.get(RECIPES_STORE, id);
+  const recipe = await db.get(RECIPES_STORE, id);
+  return recipe ? normalizeRecipe(recipe) : undefined;
 }
 
 export async function putRecipe(recipe: Recipe): Promise<void> {

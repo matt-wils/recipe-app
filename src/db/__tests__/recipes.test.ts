@@ -5,6 +5,7 @@ import {
   putRecipe,
   deleteRecipe,
   getRecipesByTag,
+  normalizeRecipe,
 } from '../recipes';
 import { putPhoto, getPhoto } from '../photos';
 import type { Recipe } from '../../types';
@@ -14,7 +15,7 @@ function makeRecipe(overrides: Partial<Recipe> = {}): Recipe {
     id: crypto.randomUUID(),
     name: 'Test Recipe',
     ingredients: [{ name: 'flour', amount: 2, unit: 'cup' }],
-    steps: ['mix'],
+    notes: 'mix',
     tags: [],
     servings: 4,
     hasPhoto: false,
@@ -75,5 +76,18 @@ describe('recipes db', () => {
 
   it('getRecipe with nonexistent id returns undefined', async () => {
     expect(await getRecipe('does-not-exist')).toBeUndefined();
+  });
+
+  it('normalizeRecipe converts legacy steps[] into a notes string', () => {
+    const { notes, ...rest } = makeRecipe();
+    const legacy = { ...rest, steps: ['preheat oven', 'mix'] } as unknown as Recipe;
+    const normalized = normalizeRecipe(legacy);
+    expect(normalized.notes).toBe('preheat oven\nmix');
+    expect('steps' in normalized).toBe(false);
+  });
+
+  it('normalizeRecipe leaves recipes that already have notes untouched', () => {
+    const recipe = makeRecipe({ notes: 'keep me' });
+    expect(normalizeRecipe(recipe)).toEqual(recipe);
   });
 });
