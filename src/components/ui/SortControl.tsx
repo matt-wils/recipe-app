@@ -8,10 +8,10 @@ interface SortControlProps {
 }
 
 const OPTIONS: { value: `${SortField}:${SortOrder}`; label: string }[] = [
-  { value: 'createdAt:desc', label: 'Newest first' },
-  { value: 'createdAt:asc', label: 'Oldest first' },
   { value: 'name:asc', label: 'Name (A-Z)' },
   { value: 'name:desc', label: 'Name (Z-A)' },
+  { value: 'lastCooked:asc', label: 'Not made in a while' },
+  { value: 'lastCooked:desc', label: 'Recently cooked' },
   { value: 'tags:asc', label: 'Tag (A-Z)' },
 ];
 

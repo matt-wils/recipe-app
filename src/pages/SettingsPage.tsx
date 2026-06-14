@@ -1,84 +1,35 @@
-import { useEffect, useRef, useState } from 'react';
-import { Download, Upload, HardDrive, ShieldCheck } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { HardDrive, ShieldCheck, BookOpen } from 'lucide-react';
 import { PageHeader } from '../components/layout/PageHeader';
-import { Button } from '../components/ui/Button';
-import { Modal } from '../components/ui/Modal';
-import { exportBackup, readImportPlan, commitImport } from '../services/backup';
-import type { ImportPlan } from '../types';
+import { useRecipes } from '../hooks/useRecipes';
 
 export function SettingsPage() {
-  const fileRef = useRef<HTMLInputElement>(null);
-  const [plan, setPlan] = useState<ImportPlan | null>(null);
-  const [error, setError] = useState('');
-  const [status, setStatus] = useState<string>('');
+  const { recipes } = useRecipes();
   const [usage, setUsage] = useState<{ used: number; persisted: boolean } | null>(null);
 
-  const loadStorage = async () => {
-    if (navigator.storage?.estimate) {
-      const est = await navigator.storage.estimate();
-      const persisted = (await navigator.storage.persisted?.()) ?? false;
-      setUsage({ used: est.usage ?? 0, persisted });
-    }
-  };
-
   useEffect(() => {
-    void loadStorage();
+    void (async () => {
+      if (navigator.storage?.estimate) {
+        const est = await navigator.storage.estimate();
+        const persisted = (await navigator.storage.persisted?.()) ?? false;
+        setUsage({ used: est.usage ?? 0, persisted });
+      }
+    })();
   }, []);
-
-  const onExport = async () => {
-    await exportBackup();
-    setStatus('Backup downloaded.');
-  };
-
-  const onPickFile = async (file: File) => {
-    setError('');
-    try {
-      setPlan(await readImportPlan(file));
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Could not read file.');
-    }
-  };
-
-  const onConfirmImport = async () => {
-    if (!plan) return;
-    await commitImport(plan);
-    setPlan(null);
-    setStatus(`Imported: ${plan.toAdd} added, ${plan.toUpdate} updated.`);
-    void loadStorage();
-  };
 
   return (
     <>
       <PageHeader title="Settings" />
       <div className="flex flex-col gap-6 p-4">
-        <section className="flex flex-col gap-3">
-          <h2 className="text-sm font-semibold text-gray-500">Backup</h2>
-          <Button onClick={onExport} className="flex items-center justify-center gap-2">
-            <Download size={18} /> Export all recipes (JSON)
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={() => fileRef.current?.click()}
-            className="flex items-center justify-center gap-2"
-          >
-            <Upload size={18} /> Import from file
-          </Button>
-          <input
-            ref={fileRef}
-            type="file"
-            accept="application/json,.json"
-            className="hidden"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) void onPickFile(file);
-              e.target.value = '';
-            }}
-          />
-          {status && <p className="text-sm text-emerald-700">{status}</p>}
-          {error && <p className="text-sm text-red-600">{error}</p>}
+        <section className="flex flex-col gap-2">
+          <h2 className="text-sm font-semibold text-gray-500">Library</h2>
+          <div className="flex items-center gap-2 text-sm text-gray-700">
+            <BookOpen size={16} /> {recipes.length} recipe{recipes.length === 1 ? '' : 's'}
+          </div>
           <p className="text-xs text-gray-500">
-            Importing merges by recipe — existing recipes are updated, new ones added,
-            and nothing is deleted.
+            Recipes live in <code>recipes.yaml</code> in the project and ship with the app. Edit
+            them on GitHub and push to update every device — your favorites and last-cooked dates
+            stay on this phone.
           </p>
         </section>
 
@@ -91,33 +42,12 @@ export function SettingsPage() {
             <div className="flex items-center gap-2 text-sm text-gray-700">
               <ShieldCheck size={16} />
               {usage.persisted
-                ? 'Storage is persistent (less likely to be cleared).'
-                : 'Storage is not persistent — export backups regularly.'}
+                ? 'Storage is persistent.'
+                : 'Storage is not persistent (favorites may be cleared by the OS).'}
             </div>
           </section>
         )}
       </div>
-
-      <Modal open={plan !== null} title="Confirm import" onClose={() => setPlan(null)}>
-        {plan && (
-          <>
-            <p className="mb-4 text-sm text-gray-600">
-              This will add <strong>{plan.toAdd}</strong> new recipe
-              {plan.toAdd === 1 ? '' : 's'} and update{' '}
-              <strong>{plan.toUpdate}</strong> existing one
-              {plan.toUpdate === 1 ? '' : 's'}. Nothing will be deleted.
-            </p>
-            <div className="flex gap-2">
-              <Button variant="secondary" className="flex-1" onClick={() => setPlan(null)}>
-                Cancel
-              </Button>
-              <Button className="flex-1" onClick={onConfirmImport}>
-                Import
-              </Button>
-            </div>
-          </>
-        )}
-      </Modal>
     </>
   );
 }

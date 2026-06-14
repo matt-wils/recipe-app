@@ -1,0 +1,92 @@
+# Recipe library — the source of truth for the app.
+# Edit on desktop or append from GitHub's mobile web editor, then push to main.
+#
+# Fields:
+#   name        (required) — also becomes the id/slug unless you set `id:`
+#   ingredients (required) — bare strings, or { name, amount, unit }. Seasoning
+#                            goes in `note`, not here (keeps the matcher useful).
+#   note        (optional) — your one-line method ("Slow cooker 2 hr low.")
+#   tags        (optional) — from src/data/tags.ts (build fails on unknown tags)
+#   gerd        (optional) — high | medium | low  (high = safest for reflux)
+#   macros      (optional) — { calories, protein } per serving
+#   servings    (optional) — defaults to 4
+#   photo       (optional) — filename under public/recipe-photos/
+
+- name: Shredded chicken, beans & rice
+  ingredients: [chicken thighs, vegetable broth, white beans, white rice]
+  note: Slow cooker 2 hr low, shred. Beans w/ minimal seasoning. Rice on the side.
+  tags: [chicken, slow-cooker, easy, mexican, dinner]
+  gerd: high
+  macros: { calories: 520, protein: 38 }
+  servings: 4
+
+- name: Sheet-pan sausage & peppers
+  ingredients:
+    - italian sausage
+    - { name: bell peppers, amount: 3 }
+    - { name: onion, amount: 1 }
+    - olive oil
+  note: 400°F, ~25 min, flip once.
+  tags: [pork, sheet-pan, weeknight, american, dinner]
+  gerd: low
+  macros: { calories: 480, protein: 28 }
+
+- name: Salmon & broccoli traybake
+  ingredients:
+    - { name: salmon fillets, amount: 4 }
+    - broccoli
+    - olive oil
+    - lemon
+  note: 425°F, ~15 min. Squeeze lemon at the end.
+  tags: [fish, oven, easy, dinner]
+  gerd: medium
+  macros: { calories: 410, protein: 34 }
+
+- name: Oatmeal with banana & peanut butter
+  ingredients:
+    - { name: rolled oats, amount: 1, unit: cup }
+    - banana
+    - peanut butter
+    - milk
+  note: Microwave oats 2 min, top with sliced banana + a spoon of PB.
+  tags: [breakfast, easy, no-cook, american]
+  gerd: high
+  macros: { calories: 380, protein: 14 }
+  servings: 1
+
+- name: Ground beef tacos
+  ingredients: [ground beef, taco shells, cheddar, lettuce, tomato]
+  note: Brown beef, season. Warm shells. Assemble.
+  tags: [beef, stovetop, weeknight, mexican, dinner]
+  gerd: low
+  macros: { calories: 560, protein: 30 }
+
+- name: Pesto pasta with peas
+  ingredients:
+    - { name: pasta, amount: 12, unit: oz }
+    - pesto
+    - frozen peas
+    - parmesan
+  note: Boil pasta, toss with pesto + peas. Finish with parmesan.
+  tags: [veg, stovetop, easy, italian, dinner]
+  gerd: medium
+  macros: { calories: 520, protein: 18 }
+
+- name: Greek yogurt bowl
+  ingredients: [greek yogurt, honey, granola, blueberries]
+  note: Layer and eat. Good post-workout.
+  tags: [breakfast, snack, no-cook, mediterranean]
+  gerd: high
+  macros: { calories: 320, protein: 22 }
+  servings: 1
+
+- name: Slow cooker pulled pork
+  ingredients:
+    - { name: pork shoulder, amount: 3, unit: lb }
+    - bbq sauce
+    - buns
+  note: Slow cooker 8 hr low, shred, mix with sauce. Serve on buns.
+  tags: [pork, slow-cooker, project, american, dinner]
+  gerd: low
+  macros: { calories: 610, protein: 40 }
+  servings: 6

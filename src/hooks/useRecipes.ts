@@ -1,21 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
-import { getAllRecipes } from '../db';
-import type { Recipe } from '../types';
+import { getAllRecipes } from '../data/library';
 
-/** Loads all recipes and exposes a refresh function. */
+/** The full recipe library (read-only, bundled at build time). */
 export function useRecipes() {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const refresh = useCallback(async () => {
-    const all = await getAllRecipes();
-    setRecipes(all);
-    setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    void refresh();
-  }, [refresh]);
-
-  return { recipes, loading, refresh };
+  return { recipes: getAllRecipes(), loading: false };
 }

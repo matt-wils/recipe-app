@@ -5,13 +5,14 @@ export function sortRecipes(
   recipes: Recipe[],
   field: SortField,
   order: SortOrder,
+  lastCooked: Record<string, number> = {},
 ): Recipe[] {
   const sorted = [...recipes].sort((a, b) => {
     switch (field) {
       case 'name':
         return a.name.localeCompare(b.name);
-      case 'createdAt':
-        return a.createdAt - b.createdAt;
+      case 'lastCooked':
+        return (lastCooked[a.id] ?? 0) - (lastCooked[b.id] ?? 0);
       case 'tags':
         return (a.tags[0] ?? '').localeCompare(b.tags[0] ?? '');
     }

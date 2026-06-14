@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { sortRecipes } from '../sortRecipes';
 import type { Recipe } from '../../types';
 
-function recipe(name: string, createdAt: number, tags: string[] = []): Recipe {
+function recipe(name: string, tags: string[] = []): Recipe {
   return {
     id: name,
     name,
@@ -10,16 +10,13 @@ function recipe(name: string, createdAt: number, tags: string[] = []): Recipe {
     notes: '',
     tags,
     servings: 1,
-    hasPhoto: false,
-    createdAt,
-    updatedAt: createdAt,
   };
 }
 
 const recipes = [
-  recipe('Banana', 3, ['fruit']),
-  recipe('Apple', 1, ['snack']),
-  recipe('Cherry', 2, ['dessert']),
+  recipe('Banana', ['fruit']),
+  recipe('Apple', ['snack']),
+  recipe('Cherry', ['dessert']),
 ];
 
 describe('sortRecipes', () => {
@@ -39,11 +36,12 @@ describe('sortRecipes', () => {
     ]);
   });
 
-  it('sorts by createdAt ascending', () => {
-    expect(sortRecipes(recipes, 'createdAt', 'asc').map((r) => r.name)).toEqual([
-      'Apple',
-      'Cherry',
+  it('sorts by lastCooked ascending (never-cooked first)', () => {
+    const lastCooked = { Apple: 300, Cherry: 100 }; // Banana never cooked -> 0
+    expect(sortRecipes(recipes, 'lastCooked', 'asc', lastCooked).map((r) => r.name)).toEqual([
       'Banana',
+      'Cherry',
+      'Apple',
     ]);
   });
 
