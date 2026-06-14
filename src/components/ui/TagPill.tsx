@@ -7,9 +7,7 @@ interface TagPillProps {
 }
 
 export function TagPill({ children, onClick, active = false }: TagPillProps) {
-  const cls = active
-    ? 'bg-emerald-600 text-white'
-    : 'bg-emerald-50 text-emerald-700';
+  const cls = active ? 'bg-emerald-600 text-white' : 'bg-emerald-50 text-emerald-700';
   return (
     <span
       onClick={onClick}

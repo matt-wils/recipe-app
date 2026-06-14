@@ -1,0 +1,43 @@
+name: CI
+
+# Validates every PR into main and every push to main. This is the required
+# status check for branch protection — main can't take a change that fails it.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# Opt the bundled JS actions into the Node 24 runtime (matches deploy.yml).
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+# A newer push/PR update supersedes an in-flight run for the same ref.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # Audit the dependencies that actually ship in the bundle. --omit=dev
+      # scopes this to production deps: a vuln in build/test tooling (eslint,
+      # stryker, vite-node) never reaches a user's browser, so gating on it
+      # would only produce un-actionable red. Dependabot keeps dev deps current.
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=moderate
+      - name: Lint
+        run: npm run lint
+      - name: Type-check
+        run: npm run typecheck
+      - name: Test (coverage-gated)
+        run: npm run test:coverage
+      - name: Build
+        run: npm run build

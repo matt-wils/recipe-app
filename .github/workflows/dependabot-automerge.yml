@@ -1,0 +1,52 @@
+name: Dependabot Auto-merge
+
+# Why pull_request_target instead of pull_request:
+#   pull_request runs in the fork/branch context with read-only permissions.
+#   Dependabot PRs are treated as forks, so auto-merge via `gh pr merge` needs
+#   write access — only pull_request_target provides that. This is the standard
+#   Dependabot auto-merge pattern endorsed by GitHub Actions docs.
+#
+# Mitigations against pull_request_target abuse:
+#   1. Hard actor check (if: github.actor == 'dependabot[bot]') — skips the job
+#      entirely for any non-Dependabot PR, preventing the elevated context from
+#      being triggered by external contributors or forks.
+#   2. fetch-metadata action is pinned to a specific commit SHA (not a mutable
+#      tag) — prevents a supply-chain compromise via tag override.
+#   3. Semver gate — auto-merge fires only for patch/minor updates; major bumps
+#      stay open as regular PRs for manual review and testing.
+#   4. Minimal permissions scope — only pull-requests: write; no contents: write
+#      or other elevated scopes that could be exploited.
+#
+# Auto-merge only *queues* the merge: the branch-protected `ci` check must pass
+# first, so a dependency bump that breaks lint/types/tests/build never lands.
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  automerge:
+    runs-on: ubuntu-latest
+    # Hard gate: skip entirely for non-Dependabot PRs.
+    if: github.actor == 'dependabot[bot]'
+    steps:
+      - name: Fetch Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
+
+      # Queue auto-merge — GitHub merges only after all required CI checks pass.
+      - name: Enable auto-merge (minor and patch only)
+        if: |
+          steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
+          steps.metadata.outputs.update-type == 'version-update:semver-minor'
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Major version bumps reach here but the step above is skipped, so they
+      # stay open as a regular PR for manual review.

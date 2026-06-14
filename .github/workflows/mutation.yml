@@ -1,0 +1,38 @@
+name: Mutation testing
+
+# Weekly because a mutation run is minutes, not seconds — too slow for every PR.
+# Stryker enforces its break threshold (stryker.config.json), so the job reddens
+# if test quality regresses on the pure util modules it mutates.
+on:
+  schedule:
+    - cron: '0 12 * * 1' # Mondays ~06:00 America/Chicago
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  stryker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # Log redirect is load-bearing: the progress spinner's control chars can
+      # emit invalid surrogate pairs that crash the upload. Exit code still
+      # enforces the break threshold in stryker.config.json.
+      - name: Stryker (threshold enforced)
+        run: npx stryker run > stryker.log 2>&1
+      - name: Show log
+        if: always()
+        run: tail -60 stryker.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stryker-log
+          path: stryker.log
+          retention-days: 30

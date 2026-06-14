@@ -49,33 +49,35 @@ export function MatcherPage() {
           <EmptyState title="No matching recipes" />
         ) : (
           <ul className="flex flex-col gap-3">
-            {matches.map(({ recipe, matchPercent, matchedCount, totalCount, missingIngredients }) => (
-              <li key={recipe.id}>
-                <Link
-                  to={`/recipe/${recipe.id}`}
-                  className="block rounded-xl bg-white p-3 shadow-sm active:bg-gray-50"
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-semibold">{recipe.name}</span>
-                    <span className="shrink-0 text-sm font-medium text-emerald-700">
-                      {Math.round(matchPercent)}%
-                    </span>
-                  </div>
-                  <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-gray-100">
-                    <div
-                      className="h-full rounded-full bg-emerald-500"
-                      style={{ width: `${matchPercent}%` }}
-                    />
-                  </div>
-                  <p className="mt-1.5 text-xs text-gray-500">
-                    Have {matchedCount}/{totalCount}.
-                    {missingIngredients.length > 0 && (
-                      <> Missing: {missingIngredients.join(', ')}</>
-                    )}
-                  </p>
-                </Link>
-              </li>
-            ))}
+            {matches.map(
+              ({ recipe, matchPercent, matchedCount, totalCount, missingIngredients }) => (
+                <li key={recipe.id}>
+                  <Link
+                    to={`/recipe/${recipe.id}`}
+                    className="block rounded-xl bg-white p-3 shadow-sm active:bg-gray-50"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-semibold">{recipe.name}</span>
+                      <span className="shrink-0 text-sm font-medium text-emerald-700">
+                        {Math.round(matchPercent)}%
+                      </span>
+                    </div>
+                    <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-gray-100">
+                      <div
+                        className="h-full rounded-full bg-emerald-500"
+                        style={{ width: `${matchPercent}%` }}
+                      />
+                    </div>
+                    <p className="mt-1.5 text-xs text-gray-500">
+                      Have {matchedCount}/{totalCount}.
+                      {missingIngredients.length > 0 && (
+                        <> Missing: {missingIngredients.join(', ')}</>
+                      )}
+                    </p>
+                  </Link>
+                </li>
+              ),
+            )}
           </ul>
         )}
       </div>

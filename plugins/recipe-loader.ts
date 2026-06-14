@@ -76,9 +76,7 @@ function parseEntry(raw: unknown, index: number, seen: Set<string>): Recipe {
     notes: typeof obj.note === 'string' ? obj.note.trim() : '',
     tags,
     servings:
-      typeof obj.servings === 'number' && obj.servings > 0
-        ? obj.servings
-        : DEFAULT_SERVINGS,
+      typeof obj.servings === 'number' && obj.servings > 0 ? obj.servings : DEFAULT_SERVINGS,
   };
 
   if (obj.gerd != null) {

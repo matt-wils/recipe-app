@@ -33,11 +33,7 @@ export function matchesFilters(recipe: Recipe, filters: ShuffleFilters): boolean
 }
 
 /** Higher weight = more likely to be picked. Favors not-recently-cooked. */
-export function weightFor(
-  recipe: Recipe,
-  lastCooked: Record<string, number>,
-  now: number,
-): number {
+export function weightFor(recipe: Recipe, lastCooked: Record<string, number>, now: number): number {
   const cookedAt = lastCooked[recipe.id];
   if (!cookedAt) return NEVER_COOKED_WEIGHT;
   return Math.max(1, Math.floor((now - cookedAt) / DAY_MS));

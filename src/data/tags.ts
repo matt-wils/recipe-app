@@ -29,9 +29,7 @@ export const TAG_DIMENSION_ORDER: TagDimension[] = [
 ];
 
 /** Flat set of every allowed tag, for validation. */
-export const ALLOWED_TAGS: ReadonlySet<string> = new Set(
-  Object.values(TAG_DIMENSIONS).flat(),
-);
+export const ALLOWED_TAGS: ReadonlySet<string> = new Set(Object.values(TAG_DIMENSIONS).flat());
 
 /** GERD friendliness levels, ordered most-friendly first. */
 export const GERD_LEVELS: GerdLevel[] = ['high', 'medium', 'low'];

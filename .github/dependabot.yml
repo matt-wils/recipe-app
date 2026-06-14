@@ -1,0 +1,32 @@
+version: 2
+
+updates:
+  # Node app — reads package.json and package-lock.json at the repo root.
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '06:00'
+      timezone: 'America/Chicago'
+    groups:
+      npm-minor-and-patch:
+        applies-to: version-updates
+        update-types: ['minor', 'patch']
+    labels: ['dependencies', 'javascript']
+    open-pull-requests-limit: 5
+
+  # GitHub Actions — scans .github/workflows/ automatically.
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '06:00'
+      timezone: 'America/Chicago'
+    groups:
+      actions-minor-and-patch:
+        applies-to: version-updates
+        update-types: ['minor', 'patch']
+    labels: ['dependencies', 'github-actions']
+    open-pull-requests-limit: 5
