@@ -30,14 +30,20 @@ IndexedDB (via `idb`).
 - **When work is done, always commit and ship it so it deploys.** Don't leave finished work
   uncommitted in the working tree. Open a PR from a feature branch and merge to `main`
   (merging to `main` is what triggers the GitHub Pages deploy).
-- **`main` is branch-protected**: a PR cannot merge until the `ci` check (`.github/workflows/ci.yml`)
-  is green. CI runs `npm audit` (prod deps) → `lint` → `typecheck` → `test:coverage` → `build`.
-  To reproduce/adjust the protection:
+- **`main` is branch-protected**: direct pushes are blocked and a PR can't merge until the `ci`
+  check (`.github/workflows/ci.yml`) is green and the branch is up to date. CI runs `npm audit`
+  (prod deps) → `lint` → `typecheck` → `test:coverage` → `build`. A PR is required but needs **0**
+  approving reviews (solo maintainer); `enforce_admins` is off, so an admin can bypass in an
+  emergency. To reproduce/adjust the protection:
   ```bash
-  gh api -X PUT repos/matt-wils/recipe-app/branches/main/protection \
-    -f 'required_status_checks[strict]=true' -f 'required_status_checks[checks][][context]=ci' \
-    -f 'enforce_admins=false' -f 'required_pull_request_reviews=' \
-    -f 'restrictions=' 2>/dev/null
+  cat <<'JSON' | gh api -X PUT repos/matt-wils/recipe-app/branches/main/protection --input -
+  {
+    "required_status_checks": { "strict": true, "checks": [{ "context": "ci" }] },
+    "enforce_admins": false,
+    "required_pull_request_reviews": { "required_approving_review_count": 0 },
+    "restrictions": null
+  }
+  JSON
   ```
 - Local hooks (husky): **pre-commit** runs lint-staged (ESLint + Prettier on staged files);
   **pre-push** runs `npm run typecheck && npm run test:run`.
