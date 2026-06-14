@@ -36,9 +36,7 @@ export function IngredientRow({ ingredient, onChange, onRemove }: IngredientRowP
           className="w-24"
           placeholder="Qty"
           value={ingredient.amount === 0 ? '' : ingredient.amount}
-          onChange={(e) =>
-            onChange({ ...ingredient, amount: parseFloat(e.target.value) || 0 })
-          }
+          onChange={(e) => onChange({ ...ingredient, amount: parseFloat(e.target.value) || 0 })}
         />
         <Input
           aria-label="Unit"

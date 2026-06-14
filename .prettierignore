@@ -1,0 +1,7 @@
+dist
+dev-dist
+coverage
+reports
+.stryker-tmp
+repomix-output.xml
+package-lock.json

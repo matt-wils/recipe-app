@@ -17,3 +17,14 @@ yarn-error.log*
 
 # Vite / PWA generated dev artifacts
 dev-dist
+
+# Test coverage reports
+coverage
+
+# Stryker mutation testing
+.stryker-tmp
+reports
+stryker.log
+
+# repomix snapshot for code review (regenerate with `npx repomix`)
+repomix-output.xml

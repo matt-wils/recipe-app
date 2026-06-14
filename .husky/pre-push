@@ -1,0 +1,6 @@
+# Type-check and run the full test suite before pushing. These are
+# whole-project checks (not per-file), so they belong on push rather than in
+# lint-staged — they mirror what ci.yml gates on, catching failures locally
+# before they reach a PR.
+npm run typecheck
+npm run test:run

@@ -7,9 +7,7 @@ import type { Recipe, MatchResult, IngredientFrequency } from '../types';
  * pantry "tomatoes" matches a recipe's "cherry tomatoes" and vice versa.
  */
 export function computeMatches(pantry: string[], recipes: Recipe[]): MatchResult[] {
-  const normalizedPantry = pantry
-    .map(normalize)
-    .filter((p) => p.length > 0);
+  const normalizedPantry = pantry.map(normalize).filter((p) => p.length > 0);
 
   if (normalizedPantry.length === 0 || recipes.length === 0) {
     return [];
@@ -23,8 +21,7 @@ export function computeMatches(pantry: string[], recipes: Recipe[]): MatchResult
     for (const ingredient of recipe.ingredients) {
       const ri = normalize(ingredient.name);
       const matched =
-        ri.length > 0 &&
-        normalizedPantry.some((pi) => pi.includes(ri) || ri.includes(pi));
+        ri.length > 0 && normalizedPantry.some((pi) => pi.includes(ri) || ri.includes(pi));
       if (matched) {
         matchedCount += 1;
       } else {

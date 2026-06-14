@@ -87,7 +87,11 @@ export function HomePage() {
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {tags.map((t) => (
-                      <TagPill key={t} active={filters.tags.includes(t)} onClick={() => toggleTag(t)}>
+                      <TagPill
+                        key={t}
+                        active={filters.tags.includes(t)}
+                        onClick={() => toggleTag(t)}
+                      >
                         {t}
                       </TagPill>
                     ))}
@@ -115,12 +119,7 @@ export function HomePage() {
         )}
 
         {pick ? (
-          <PickCard
-            recipe={pick}
-            justCooked={justCooked}
-            onMadeIt={onMadeIt}
-            onShuffle={shuffle}
-          />
+          <PickCard recipe={pick} justCooked={justCooked} onMadeIt={onMadeIt} onShuffle={shuffle} />
         ) : (
           <EmptyState
             icon={<ChefHat size={40} />}

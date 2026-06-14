@@ -25,9 +25,7 @@ export function RecipeListPage() {
   );
 
   const visible = useMemo(() => {
-    const filtered = activeTag
-      ? recipes.filter((r) => r.tags.includes(activeTag))
-      : recipes;
+    const filtered = activeTag ? recipes.filter((r) => r.tags.includes(activeTag)) : recipes;
     return sortRecipes(filtered, field, order, lastCooked);
   }, [recipes, activeTag, field, order, lastCooked]);
 

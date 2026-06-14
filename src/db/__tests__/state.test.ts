@@ -1,10 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  getFavorites,
-  toggleFavorite,
-  getLastCooked,
-  markCookedNow,
-} from '../state';
+import { getFavorites, toggleFavorite, getLastCooked, markCookedNow } from '../state';
 
 describe('favorites', () => {
   it('starts empty', async () => {

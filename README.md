@@ -1,17 +1,20 @@
 # recipe-app
 
-A personal recipe manager, built as an installable PWA. All data lives in your
-browser's IndexedDB — there is no server and no account. Designed for free
-static hosting on GitHub Pages.
+A personal recipe manager, built as an installable PWA. The recipe library is
+authored in git (`recipes.yaml`) and bundled at build time; per-device state
+(what you've cooked, your filters) lives in the browser's IndexedDB. There is no
+server and no account. Designed for free static hosting on GitHub Pages.
 
 ## Features
 
-- Add, edit, delete recipes (name, ingredients, steps, tags, servings, photo)
-- Sort by date or name; filter by tag
+- **Git-authored library** — recipes live in `recipes.yaml` (name, ingredients,
+  note, tags, servings, gerd, macros, photo); edit on desktop or from GitHub's
+  mobile web editor, push to `main`, and the deploy rebuilds the app
+- Sort by date or name; filter by tag and reflux (GERD) friendliness
+- **Shuffle** — pick something to cook, weighted away from what you cooked recently
 - **Serving scaler** — adjust servings and ingredient amounts recompute live
 - **"What can I make?"** — enter ingredients you have; recipes are ranked by match %
 - **Common ingredients** — see which ingredients appear across the most recipes
-- **JSON backup** — export everything to a file; import merges by recipe (non-destructive)
 - Installable to the iPhone home screen; works offline
 
 ## Tech
@@ -23,22 +26,38 @@ React + Vite · TypeScript · Tailwind CSS v4 · IndexedDB (`idb`) ·
 
 ```bash
 npm install
-npm run dev      # dev server
-npm run test     # unit tests (watch)
-npm run build    # type-check + production build
-npm run preview  # serve the production build locally
+npm run dev            # dev server
+npm run test           # unit tests (watch)
+npm run test:run       # unit tests (once)
+npm run test:coverage  # tests + coverage gate
+npm run lint           # ESLint
+npm run typecheck      # tsc --noEmit
+npm run format         # Prettier --write
+npm run check:library  # validate recipes.yaml
+npm run build          # type-check + production build
+npm run preview        # serve the production build locally
 ```
 
-## Data & backups (read this)
+A pre-commit hook runs lint-staged (ESLint + Prettier on staged files); a
+pre-push hook runs the type-check and the full test suite. CI (`.github/workflows/ci.yml`)
+gates every PR on lint + typecheck + coverage + build before it can merge to `main`.
 
-Your recipes are stored only in the browser on the device you use. The app asks
-for persistent storage, but **iOS can still evict IndexedDB** under storage
-pressure or long inactivity. The JSON export is your real backup:
+## Data & backups
 
-- Settings → **Export all recipes** saves a `.json` file.
-- A reminder banner appears if it has been >14 days since your last export.
-- To move recipes to another device, export on one and import on the other
-  (Settings → Import). Import merges by recipe id and never deletes.
+Your **recipes** are safe by construction: they live in `recipes.yaml` in this
+repo, so git is the backup. Add or edit a recipe by committing to `recipes.yaml`
+(the build validates it — an unknown tag or malformed entry fails the build).
+
+Only **per-device state** — last-cooked timestamps and your filter selections —
+lives in the browser's IndexedDB. The app asks for persistent storage, but iOS
+can still evict it under storage pressure or long inactivity; losing it just
+resets your shuffle weighting and filters, not any recipes.
+
+Validate the library locally before pushing:
+
+```bash
+npm run check:library   # re-runs the build's validator over recipes.yaml
+```
 
 ## Deploy (GitHub Pages)
 

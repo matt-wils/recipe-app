@@ -10,12 +10,9 @@ describe('scaleAmount', () => {
     [3, 6, 4, 2],
   ];
 
-  it.each(cases)(
-    'scaleAmount(%d, %d, %d) === %d',
-    (amount, fromServings, toServings, expected) => {
-      expect(scaleAmount(amount, fromServings, toServings)).toBeCloseTo(expected);
-    },
-  );
+  it.each(cases)('scaleAmount(%d, %d, %d) === %d', (amount, fromServings, toServings, expected) => {
+    expect(scaleAmount(amount, fromServings, toServings)).toBeCloseTo(expected);
+  });
 
   it('guards against zero original servings', () => {
     expect(scaleAmount(2, 0, 4)).toBe(2);
