@@ -12,7 +12,7 @@ export function CommonIngredientsPage() {
 
   return (
     <>
-      <PageHeader title="Common ingredients" />
+      <PageHeader title="Common ingredients" back />
       {freq.length === 0 ? (
         <EmptyState
           icon={<BarChart3 size={36} />}

@@ -1,0 +1,50 @@
+import type { GerdLevel } from '../types';
+
+/**
+ * Controlled tag vocabulary, grouped by dimension. Used by:
+ *  - the build-time recipe loader (plugins/vite-plugin-recipe-library.ts) to
+ *    reject any tag not listed here, so a typo breaks the build instead of
+ *    silently fragmenting the filters; and
+ *  - the UI, to render facet chips grouped by dimension.
+ *
+ * Grow these lists as you add recipes — just add the tag here first.
+ */
+export const TAG_DIMENSIONS = {
+  meal: ['breakfast', 'lunch', 'dinner', 'snack', 'dessert'],
+  cuisine: ['mexican', 'american', 'italian', 'asian', 'mediterranean', 'indian'],
+  protein: ['chicken', 'beef', 'pork', 'fish', 'veg'],
+  method: ['slow-cooker', 'sheet-pan', 'stovetop', 'grill', 'oven', 'no-cook'],
+  effort: ['easy', 'weeknight', 'project'],
+} as const;
+
+export type TagDimension = keyof typeof TAG_DIMENSIONS;
+
+/** Display order for facet groups. */
+export const TAG_DIMENSION_ORDER: TagDimension[] = [
+  'meal',
+  'cuisine',
+  'protein',
+  'method',
+  'effort',
+];
+
+/** Flat set of every allowed tag, for validation. */
+export const ALLOWED_TAGS: ReadonlySet<string> = new Set(
+  Object.values(TAG_DIMENSIONS).flat(),
+);
+
+/** GERD friendliness levels, ordered most-friendly first. */
+export const GERD_LEVELS: GerdLevel[] = ['high', 'medium', 'low'];
+
+export const GERD_LABELS: Record<GerdLevel, string> = {
+  high: 'Reflux-friendly',
+  medium: 'Reflux-moderate',
+  low: 'Reflux-risky',
+};
+
+/** The dimension a given tag belongs to, or undefined if unknown. */
+export function tagDimension(tag: string): TagDimension | undefined {
+  return (Object.keys(TAG_DIMENSIONS) as TagDimension[]).find((dim) =>
+    (TAG_DIMENSIONS[dim] as readonly string[]).includes(tag),
+  );
+}

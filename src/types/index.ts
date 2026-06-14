@@ -1,28 +1,26 @@
 export interface Ingredient {
   name: string;
-  amount: number;
-  unit: string; // empty string for unitless
+  amount?: number; // optional — many recipes just list the ingredient
+  unit?: string; // optional unit (e.g. "lb", "cup")
+}
+
+export type GerdLevel = 'high' | 'medium' | 'low'; // high = safest for reflux
+
+export interface Macros {
+  calories?: number; // per serving
+  protein?: number; // grams, per serving
 }
 
 export interface Recipe {
-  id: string; // crypto.randomUUID()
+  id: string; // slug derived from name (or explicit `id` in YAML)
   name: string;
   ingredients: Ingredient[];
-  notes: string;
-  tags: string[];
+  notes: string; // freeform method note (authored as `note` in YAML)
+  tags: string[]; // from the controlled vocabulary in src/data/tags.ts
   servings: number;
-  hasPhoto: boolean; // flag only; photo bytes live in the `photos` store
-  createdAt: number; // Date.now()
-  updatedAt: number;
-}
-
-/**
- * Stored in a SEPARATE IndexedDB store, keyed by recipe id, loaded lazily.
- * Keeps getAllRecipes() light (no base64 in the list query).
- */
-export interface RecipePhoto {
-  recipeId: string; // matches Recipe.id
-  photoBase64: string; // data:image/jpeg;base64,...
+  gerd?: GerdLevel;
+  macros?: Macros;
+  photo?: string; // filename under public/recipe-photos/
 }
 
 export interface MatchResult {
@@ -39,21 +37,5 @@ export interface IngredientFrequency {
   recipeIds: string[];
 }
 
-export type SortField = 'name' | 'createdAt' | 'tags';
+export type SortField = 'name' | 'lastCooked' | 'tags';
 export type SortOrder = 'asc' | 'desc';
-
-/** Shape of an exported backup file. */
-export interface BackupFile {
-  version: number;
-  exportedAt: number;
-  recipes: Recipe[];
-  photos: RecipePhoto[];
-}
-
-/** Result of analysing a backup file before committing the import. */
-export interface ImportPlan {
-  recipes: Recipe[];
-  photos: RecipePhoto[];
-  toAdd: number;
-  toUpdate: number;
-}

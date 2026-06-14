@@ -1,10 +1,10 @@
 import { NavLink } from 'react-router-dom';
-import { BookOpen, Search, BarChart3, Settings } from 'lucide-react';
+import { Shuffle, BookOpen, Search, Settings } from 'lucide-react';
 
 const TABS = [
-  { to: '/', label: 'Recipes', icon: BookOpen, end: true },
+  { to: '/', label: 'Tonight', icon: Shuffle, end: true },
+  { to: '/browse', label: 'Browse', icon: BookOpen, end: false },
   { to: '/matcher', label: 'Match', icon: Search, end: false },
-  { to: '/common', label: 'Compare', icon: BarChart3, end: false },
   { to: '/settings', label: 'Settings', icon: Settings, end: false },
 ];
 

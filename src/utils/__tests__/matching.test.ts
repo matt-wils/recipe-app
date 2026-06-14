@@ -8,13 +8,10 @@ function recipe(name: string, ingredientNames: string[]): Recipe {
   return {
     id: `r${idCounter}`,
     name,
-    ingredients: ingredientNames.map((n) => ({ name: n, amount: 1, unit: '' })),
+    ingredients: ingredientNames.map((n) => ({ name: n })),
     notes: '',
     tags: [],
     servings: 1,
-    hasPhoto: false,
-    createdAt: idCounter,
-    updatedAt: idCounter,
   };
 }
 

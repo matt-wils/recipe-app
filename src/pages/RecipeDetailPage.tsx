@@ -1,25 +1,23 @@
 import { useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Pencil, Trash2 } from 'lucide-react';
+import { useParams } from 'react-router-dom';
+import { Heart, Check } from 'lucide-react';
 import { PageHeader } from '../components/layout/PageHeader';
 import { ServingScaler } from '../components/recipe/ServingScaler';
 import { NotesView } from '../components/recipe/NotesView';
 import { TagPill } from '../components/ui/TagPill';
-import { Button } from '../components/ui/Button';
-import { Modal } from '../components/ui/Modal';
 import { EmptyState } from '../components/ui/EmptyState';
 import { useRecipe } from '../hooks/useRecipe';
-import { deleteRecipe } from '../db';
+import { useRecipeState } from '../hooks/useRecipeState';
 import { scaleAmount, formatAmount } from '../utils/scaling';
+import { relativeDays } from '../utils/relativeTime';
+import { GERD_LABELS } from '../data/tags';
 
 export function RecipeDetailPage() {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const { recipe, photo, loading } = useRecipe(id);
+  const { recipe, photo } = useRecipe(id);
+  const { favorites, lastCooked, toggleFavorite, markCooked } = useRecipeState();
   const [servings, setServings] = useState<number | null>(null);
-  const [confirmOpen, setConfirmOpen] = useState(false);
 
-  if (loading) return <PageHeader title="" back />;
   if (!recipe) {
     return (
       <>
@@ -30,11 +28,10 @@ export function RecipeDetailPage() {
   }
 
   const currentServings = servings ?? recipe.servings;
-
-  const onDelete = async () => {
-    await deleteRecipe(recipe.id);
-    navigate('/', { replace: true });
-  };
+  const scalable = recipe.ingredients.some((ing) => ing.amount != null);
+  const isFavorite = favorites.has(recipe.id);
+  const cookedAt = lastCooked[recipe.id];
+  const macros = recipe.macros;
 
   return (
     <>
@@ -42,22 +39,16 @@ export function RecipeDetailPage() {
         title={recipe.name}
         back
         action={
-          <div className="flex gap-1">
-            <Link
-              to={`/recipe/${recipe.id}/edit`}
-              aria-label="Edit"
-              className="flex h-10 w-10 items-center justify-center rounded-full active:bg-gray-100"
-            >
-              <Pencil size={20} />
-            </Link>
-            <button
-              aria-label="Delete"
-              onClick={() => setConfirmOpen(true)}
-              className="flex h-10 w-10 items-center justify-center rounded-full text-red-600 active:bg-red-50"
-            >
-              <Trash2 size={20} />
-            </button>
-          </div>
+          <button
+            aria-label={isFavorite ? 'Remove favorite' : 'Add favorite'}
+            onClick={() => void toggleFavorite(recipe.id)}
+            className="flex h-10 w-10 items-center justify-center rounded-full active:bg-gray-100"
+          >
+            <Heart
+              size={20}
+              className={isFavorite ? 'fill-rose-500 text-rose-500' : 'text-gray-500'}
+            />
+          </button>
         }
       />
 
@@ -74,44 +65,71 @@ export function RecipeDetailPage() {
           </div>
         )}
 
-        <ServingScaler servings={currentServings} onChange={setServings} />
+        {(recipe.gerd || macros) && (
+          <div className="flex flex-wrap gap-2 text-sm">
+            {recipe.gerd && (
+              <span className="rounded-full bg-gray-100 px-3 py-1 text-gray-700">
+                {GERD_LABELS[recipe.gerd]}
+              </span>
+            )}
+            {macros && (macros.calories != null || macros.protein != null) && (
+              <span className="rounded-full bg-gray-100 px-3 py-1 text-gray-700">
+                {[
+                  macros.calories != null && `${macros.calories} cal`,
+                  macros.protein != null && `${macros.protein}g protein`,
+                ]
+                  .filter(Boolean)
+                  .join(' · ')}
+              </span>
+            )}
+          </div>
+        )}
+
+        <div className="flex flex-col gap-2">
+          <button
+            onClick={() => void markCooked(recipe.id)}
+            className="flex h-11 items-center justify-center gap-1.5 rounded-xl bg-emerald-600 font-semibold text-white active:bg-emerald-700"
+          >
+            <Check size={18} /> Made it today
+          </button>
+          {cookedAt && (
+            <p className="text-center text-sm text-gray-500">
+              Last cooked {relativeDays(cookedAt)}
+            </p>
+          )}
+        </div>
+
+        {scalable && <ServingScaler servings={currentServings} onChange={setServings} />}
 
         <section>
           <h2 className="mb-2 text-lg font-semibold">Ingredients</h2>
           <ul className="flex flex-col gap-1.5">
             {recipe.ingredients.map((ing, i) => {
-              const amount = scaleAmount(ing.amount, recipe.servings, currentServings);
+              const amount =
+                ing.amount != null
+                  ? scaleAmount(ing.amount, recipe.servings, currentServings)
+                  : undefined;
               return (
                 <li key={i} className="flex justify-between gap-3 border-b border-gray-100 py-1.5">
                   <span>{ing.name}</span>
-                  <span className="shrink-0 text-gray-600">
-                    {ing.amount > 0 && formatAmount(amount)} {ing.unit}
-                  </span>
+                  {amount != null && (
+                    <span className="shrink-0 text-gray-600">
+                      {formatAmount(amount)} {ing.unit}
+                    </span>
+                  )}
                 </li>
               );
             })}
           </ul>
         </section>
 
-        <section>
-          <h2 className="mb-2 text-lg font-semibold">Notes</h2>
-          <NotesView notes={recipe.notes} />
-        </section>
+        {recipe.notes && (
+          <section>
+            <h2 className="mb-2 text-lg font-semibold">Notes</h2>
+            <NotesView notes={recipe.notes} />
+          </section>
+        )}
       </div>
-
-      <Modal open={confirmOpen} title="Delete recipe?" onClose={() => setConfirmOpen(false)}>
-        <p className="mb-4 text-sm text-gray-600">
-          "{recipe.name}" will be permanently removed.
-        </p>
-        <div className="flex gap-2">
-          <Button variant="secondary" className="flex-1" onClick={() => setConfirmOpen(false)}>
-            Cancel
-          </Button>
-          <Button variant="danger" className="flex-1" onClick={onDelete}>
-            Delete
-          </Button>
-        </div>
-      </Modal>
     </>
   );
 }

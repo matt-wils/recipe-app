@@ -1,19 +1,21 @@
 import { useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Plus, BookOpen } from 'lucide-react';
+import { BarChart3 } from 'lucide-react';
 import { PageHeader } from '../components/layout/PageHeader';
 import { RecipeCard } from '../components/recipe/RecipeCard';
 import { SortControl } from '../components/ui/SortControl';
 import { TagPill } from '../components/ui/TagPill';
 import { EmptyState } from '../components/ui/EmptyState';
 import { useRecipes } from '../hooks/useRecipes';
+import { useRecipeState } from '../hooks/useRecipeState';
 import { sortRecipes } from '../utils/sortRecipes';
 import type { SortField, SortOrder } from '../types';
 
 export function RecipeListPage() {
-  const { recipes, loading } = useRecipes();
-  const [field, setField] = useState<SortField>('createdAt');
-  const [order, setOrder] = useState<SortOrder>('desc');
+  const { recipes } = useRecipes();
+  const { lastCooked, favorites } = useRecipeState();
+  const [field, setField] = useState<SortField>('name');
+  const [order, setOrder] = useState<SortOrder>('asc');
   const [params, setParams] = useSearchParams();
   const activeTag = params.get('tag');
 
@@ -26,8 +28,8 @@ export function RecipeListPage() {
     const filtered = activeTag
       ? recipes.filter((r) => r.tags.includes(activeTag))
       : recipes;
-    return sortRecipes(filtered, field, order);
-  }, [recipes, activeTag, field, order]);
+    return sortRecipes(filtered, field, order, lastCooked);
+  }, [recipes, activeTag, field, order, lastCooked]);
 
   const toggleTag = (tag: string) => {
     setParams(activeTag === tag ? {} : { tag });
@@ -36,24 +38,20 @@ export function RecipeListPage() {
   return (
     <>
       <PageHeader
-        title="My Recipes"
+        title="Browse"
         action={
           <Link
-            to="/recipe/new"
-            aria-label="Add recipe"
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600 text-white active:bg-emerald-700"
+            to="/common"
+            aria-label="Ingredient frequency"
+            className="flex h-10 w-10 items-center justify-center rounded-full text-gray-600 active:bg-gray-100"
           >
-            <Plus size={22} />
+            <BarChart3 size={20} />
           </Link>
         }
       />
 
-      {!loading && recipes.length === 0 ? (
-        <EmptyState
-          icon={<BookOpen size={40} />}
-          title="No recipes yet"
-          message="Tap the + button to add your first recipe."
-        />
+      {recipes.length === 0 ? (
+        <EmptyState title="No recipes" message="Add recipes to recipes.yaml." />
       ) : (
         <div className="flex flex-col gap-3 p-3">
           <div className="flex items-center justify-between">
@@ -81,7 +79,7 @@ export function RecipeListPage() {
           )}
 
           {visible.map((r) => (
-            <RecipeCard key={r.id} recipe={r} />
+            <RecipeCard key={r.id} recipe={r} favorite={favorites.has(r.id)} />
           ))}
         </div>
       )}

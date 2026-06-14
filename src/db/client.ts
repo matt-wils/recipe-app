@@ -1,12 +1,13 @@
 import { openDB, type DBSchema, type IDBPDatabase } from 'idb';
-import type { Recipe, RecipePhoto } from '../types';
 
 export const DB_NAME = 'recipe-app-db';
-export const DB_VERSION = 1;
+export const DB_VERSION = 2;
 
-export const RECIPES_STORE = 'recipes';
-export const PHOTOS_STORE = 'photos';
 export const META_STORE = 'meta';
+
+// Legacy stores from v1 (recipes are now bundled from git, not stored locally).
+const RECIPES_STORE = 'recipes';
+const PHOTOS_STORE = 'photos';
 
 export interface MetaRecord {
   key: string;
@@ -14,19 +15,6 @@ export interface MetaRecord {
 }
 
 export interface RecipeDB extends DBSchema {
-  recipes: {
-    key: string;
-    value: Recipe;
-    indexes: {
-      name: string;
-      createdAt: number;
-      tags: string;
-    };
-  };
-  photos: {
-    key: string;
-    value: RecipePhoto;
-  };
   meta: {
     key: string;
     value: MetaRecord;
@@ -38,18 +26,15 @@ let dbPromise: Promise<IDBPDatabase<RecipeDB>> | null = null;
 function open(): Promise<IDBPDatabase<RecipeDB>> {
   return openDB<RecipeDB>(DB_NAME, DB_VERSION, {
     upgrade(db) {
-      // Version 1 - initial schema.
-      if (!db.objectStoreNames.contains(RECIPES_STORE)) {
-        const recipes = db.createObjectStore(RECIPES_STORE, { keyPath: 'id' });
-        recipes.createIndex('name', 'name');
-        recipes.createIndex('createdAt', 'createdAt');
-        recipes.createIndex('tags', 'tags', { multiEntry: true });
-      }
-      if (!db.objectStoreNames.contains(PHOTOS_STORE)) {
-        db.createObjectStore(PHOTOS_STORE, { keyPath: 'recipeId' });
-      }
       if (!db.objectStoreNames.contains(META_STORE)) {
         db.createObjectStore(META_STORE, { keyPath: 'key' });
+      }
+      // v2: recipes moved to the bundled git library; drop the old local stores.
+      // These names are no longer in the schema type, so cast to satisfy idb.
+      for (const legacy of [RECIPES_STORE, PHOTOS_STORE] as const) {
+        if (db.objectStoreNames.contains(legacy as never)) {
+          db.deleteObjectStore(legacy as never);
+        }
       }
     },
   });
