@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Heart } from 'lucide-react';
+import { Heart, ShoppingCart } from 'lucide-react';
 import { TagPill } from '../ui/TagPill';
 import { displayPhotoUrl } from '../../data/library';
 import type { Recipe } from '../../types';
@@ -7,9 +7,18 @@ import type { Recipe } from '../../types';
 interface RecipeCardProps {
   recipe: Recipe;
   favorite?: boolean;
+  /** Whether the recipe is on the shopping list (renders the toggle filled). */
+  onList?: boolean;
+  /** Toggle the recipe on/off the shopping list. Omit to hide the control. */
+  onToggleList?: () => void;
 }
 
-export function RecipeCard({ recipe, favorite = false }: RecipeCardProps) {
+export function RecipeCard({
+  recipe,
+  favorite = false,
+  onList = false,
+  onToggleList,
+}: RecipeCardProps) {
   const photo = displayPhotoUrl(recipe);
   const protein = recipe.macros?.protein;
 
@@ -38,6 +47,23 @@ export function RecipeCard({ recipe, favorite = false }: RecipeCardProps) {
           </div>
         )}
       </div>
+      {onToggleList && (
+        <button
+          aria-label={onList ? 'Remove from shopping list' : 'Add to shopping list'}
+          aria-pressed={onList}
+          onClick={(e) => {
+            // The card is a Link — keep the tap from navigating to the recipe.
+            e.preventDefault();
+            e.stopPropagation();
+            onToggleList();
+          }}
+          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${
+            onList ? 'bg-emerald-100 text-emerald-700' : 'text-gray-400 active:bg-gray-100'
+          }`}
+        >
+          <ShoppingCart size={18} />
+        </button>
+      )}
     </Link>
   );
 }

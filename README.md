@@ -15,6 +15,8 @@ server and no account. Designed for free static hosting on GitHub Pages.
 - **Serving scaler** — adjust servings and ingredient amounts recompute live
 - **"What can I make?"** — enter ingredients you have; recipes are ranked by match %
 - **Common ingredients** — see which ingredients appear across the most recipes
+- **Shopping list** — add recipes from Tonight, Browse, or a recipe page; ingredients
+  are grouped by store section and like items are merged with their amounts summed
 - Installable to the iPhone home screen; works offline
 
 ## Tech
@@ -48,10 +50,10 @@ Your **recipes** are safe by construction: they live in `recipes.yaml` in this
 repo, so git is the backup. Add or edit a recipe by committing to `recipes.yaml`
 (the build validates it — an unknown tag or malformed entry fails the build).
 
-Only **per-device state** — last-cooked timestamps and your filter selections —
-lives in the browser's IndexedDB. The app asks for persistent storage, but iOS
-can still evict it under storage pressure or long inactivity; losing it just
-resets your shuffle weighting and filters, not any recipes.
+Only **per-device state** — last-cooked timestamps, favorites, and your shopping
+list — lives in the browser's IndexedDB. The app asks for persistent storage, but
+iOS can still evict it under storage pressure or long inactivity; losing it just
+resets your shuffle weighting, favorites, and shopping list, not any recipes.
 
 Validate the library locally before pushing:
 
