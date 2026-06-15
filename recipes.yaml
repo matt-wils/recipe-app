@@ -331,3 +331,252 @@
   macros: { calories: 600, protein: 22 }
   servings: 2
   photo: margherita-pizza.jpg
+
+# --- Healthy & reflux-friendly ---------------------------------------------
+
+- name: Buddha bowl
+  ingredients: [quinoa, chickpeas, sweet potato, kale, avocado, tahini]
+  note: Roast sweet potato and chickpeas; pile over quinoa with kale and avocado; drizzle tahini.
+  tags: [veg, mediterranean, lunch, easy]
+  gerd: high
+  macros: { calories: 480, protein: 16 }
+  servings: 2
+  photo: buddha-bowl.jpg
+
+- name: Poke bowl
+  ingredients: [sushi-grade tuna, white rice, cucumber, edamame, avocado, soy sauce]
+  note: Cube tuna and toss with a little soy; serve over rice with cucumber, edamame and avocado.
+  tags: [fish, asian, lunch, easy]
+  gerd: medium
+  macros: { calories: 450, protein: 30 }
+  servings: 2
+  photo: poke-bowl.jpg
+
+- name: Lentil soup
+  ingredients: [brown lentils, carrot, celery, onion, vegetable broth]
+  note: Soften the veg, add lentils and broth; simmer ~30 min until tender. Cumin to taste.
+  tags: [veg, mediterranean, lunch, easy]
+  gerd: medium
+  macros: { calories: 280, protein: 18 }
+  servings: 4
+  photo: lentil-soup.jpg
+
+- name: Hummus plate
+  ingredients: [chickpeas, tahini, lemon, garlic, olive oil]
+  note: Blend smooth with a splash of water; serve with veg sticks or warm pita.
+  tags: [veg, mediterranean, snack, easy]
+  gerd: medium
+  macros: { calories: 230, protein: 8 }
+  servings: 4
+  photo: hummus.jpg
+
+- name: Avocado toast
+  ingredients: [sourdough bread, avocado, egg, olive oil]
+  note: Toast the bread, mash avocado on top, and finish with a fried or poached egg.
+  tags: [breakfast, veg, easy]
+  gerd: high
+  macros: { calories: 350, protein: 14 }
+  servings: 1
+  photo: avocado-toast.jpg
+
+- name: Roast chicken
+  ingredients: [whole chicken, butter, carrot, potato, thyme]
+  note: Roast at 425°F ~75 min until the juices run clear; rest before carving.
+  tags: [chicken, american, dinner]
+  gerd: medium
+  macros: { calories: 520, protein: 42 }
+  servings: 4
+  photo: roast-chicken.jpg
+
+- name: Quinoa salad
+  ingredients: [quinoa, cucumber, bell pepper, parsley, olive oil]
+  note: Toss cooled quinoa with chopped veg and herbs; olive oil and a little salt.
+  tags: [veg, mediterranean, lunch, easy]
+  gerd: high
+  macros: { calories: 320, protein: 10 }
+  servings: 4
+  photo: quinoa-salad.jpg
+
+# --- Common staples --------------------------------------------------------
+
+- name: Spaghetti and meatballs
+  ingredients: [spaghetti, ground beef, breadcrumbs, egg, tomato sauce, parmesan]
+  note: Roll and brown meatballs; simmer in tomato sauce; serve over spaghetti with parmesan.
+  tags: [beef, italian, dinner]
+  gerd: low
+  macros: { calories: 650, protein: 34 }
+  servings: 4
+  photo: spaghetti-and-meatballs.jpg
+
+- name: Macaroni and cheese
+  ingredients: [macaroni, cheddar, butter, flour, milk]
+  note: Make a roux, melt in the cheese, fold through cooked macaroni; bake for a crust if you like.
+  tags: [veg, american, dinner, easy]
+  gerd: medium
+  macros: { calories: 600, protein: 22 }
+  servings: 4
+  photo: macaroni-and-cheese.jpg
+
+- name: Cheeseburger
+  ingredients: [ground beef, burger buns, cheddar, lettuce, tomato, onion]
+  note: Form patties and sear hard; melt cheese on top; build in toasted buns.
+  tags: [beef, american, dinner]
+  gerd: low
+  macros: { calories: 620, protein: 32 }
+  servings: 4
+  photo: cheeseburger.jpg
+
+- name: Lasagna
+  ingredients: [lasagna noodles, ground beef, tomato sauce, ricotta, mozzarella]
+  note: Layer meat sauce, noodles and cheese; bake 375°F ~45 min; rest before slicing.
+  tags: [beef, italian, dinner]
+  gerd: low
+  macros: { calories: 580, protein: 30 }
+  servings: 6
+  photo: lasagna.jpg
+
+- name: Spaghetti carbonara
+  ingredients: [spaghetti, pancetta, eggs, parmesan, black pepper]
+  note: Toss hot pasta with crisp pancetta, then egg and cheese off the heat to a silky sauce.
+  tags: [pork, italian, dinner]
+  gerd: medium
+  macros: { calories: 620, protein: 26 }
+  servings: 4
+  photo: spaghetti-carbonara.jpg
+
+- name: Fried chicken
+  ingredients: [chicken pieces, buttermilk, flour, paprika]
+  note: Soak in buttermilk, dredge in seasoned flour, and fry at 350°F until golden and cooked through.
+  tags: [chicken, american, dinner]
+  gerd: low
+  macros: { calories: 600, protein: 36 }
+  servings: 4
+  photo: fried-chicken.jpg
+
+- name: Beef and broccoli
+  ingredients: [flank steak, broccoli, soy sauce, garlic, ginger, cornstarch]
+  note: Sear sliced beef, add broccoli; toss in a soy-garlic-ginger sauce thickened with cornstarch.
+  tags: [beef, chinese, dinner, easy]
+  gerd: medium
+  macros: { calories: 420, protein: 32 }
+  servings: 4
+  photo: beef-and-broccoli.jpg
+
+- name: Chicken curry
+  ingredients: [chicken thighs, onion, garlic, ginger, coconut milk, curry powder]
+  note: Brown chicken, soften the aromatics, add curry powder and coconut milk; simmer ~25 min.
+  tags: [chicken, indian, dinner]
+  gerd: low
+  macros: { calories: 520, protein: 34 }
+  servings: 4
+  photo: chicken-curry.jpg
+
+- name: Chili con carne
+  ingredients: [ground beef, kidney beans, tomato, onion, chili powder]
+  note: Brown beef with onion; add tomato, beans and chili; simmer low ~45 min.
+  tags: [beef, mexican, dinner]
+  gerd: low
+  macros: { calories: 540, protein: 34 }
+  servings: 4
+  photo: chili-con-carne.jpg
+
+- name: Chicken quesadilla
+  ingredients: [tortillas, chicken breast, cheddar, bell pepper, onion]
+  note: Fill tortillas with chicken, cheese and peppers; griddle until crisp and melty.
+  tags: [chicken, mexican, dinner, easy]
+  gerd: low
+  macros: { calories: 520, protein: 30 }
+  servings: 2
+  photo: chicken-quesadilla.jpg
+
+- name: French toast
+  ingredients: [bread, eggs, milk, cinnamon, maple syrup]
+  note: Soak bread in egg and milk; fry in butter; serve with maple syrup.
+  tags: [breakfast, american, easy]
+  gerd: medium
+  macros: { calories: 420, protein: 14 }
+  servings: 2
+  photo: french-toast.jpg
+
+- name: Caesar salad
+  ingredients: [romaine lettuce, parmesan, croutons, caesar dressing]
+  note: Toss crisp romaine with the dressing; top with shaved parmesan and croutons.
+  tags: [veg, american, lunch, easy]
+  gerd: low
+  macros: { calories: 360, protein: 10 }
+  servings: 2
+  photo: caesar-salad.jpg
+
+- name: Ramen
+  ingredients: [ramen noodles, pork belly, egg, scallion, miso]
+  note: Simmer a quick pork-miso broth; cook the noodles; top with sliced pork, a soft egg and scallion.
+  tags: [pork, japanese, dinner]
+  gerd: medium
+  macros: { calories: 560, protein: 28 }
+  servings: 2
+  photo: ramen.jpg
+
+- name: Beef pho
+  ingredients: [rice noodles, beef, beef broth, ginger, star anise, bean sprouts]
+  note: Steep the broth with charred ginger and spices; pour over noodles and thin raw beef.
+  tags: [beef, asian, dinner]
+  gerd: medium
+  macros: { calories: 450, protein: 30 }
+  servings: 4
+  photo: beef-pho.jpg
+
+- name: Sweet and sour pork
+  ingredients: [pork shoulder, bell pepper, pineapple, vinegar, sugar, ketchup]
+  note: Fry battered pork; toss in a sweet-sour sauce with peppers and pineapple.
+  tags: [pork, chinese, dinner]
+  gerd: low
+  macros: { calories: 560, protein: 28 }
+  servings: 4
+  photo: sweet-and-sour-pork.jpg
+
+# --- Desserts --------------------------------------------------------------
+
+- name: Chocolate chip cookies
+  ingredients: [flour, butter, brown sugar, egg, chocolate chips]
+  note: Cream butter and sugar; mix in egg, then flour and chips; bake 350°F ~11 min.
+  tags: [dessert, american, easy]
+  gerd: low
+  macros: { calories: 180, protein: 2 }
+  servings: 24
+  photo: chocolate-chip-cookies.png
+
+- name: Brownies
+  ingredients: [butter, dark chocolate, sugar, eggs, flour]
+  note: Melt butter and chocolate; whisk in sugar and eggs, then flour; bake 350°F ~25 min.
+  tags: [dessert, american, easy]
+  gerd: low
+  macros: { calories: 220, protein: 3 }
+  servings: 16
+  photo: brownies.jpg
+
+- name: Apple pie
+  ingredients: [pie crust, apples, sugar, cinnamon, butter]
+  note: Toss sliced apples with sugar and cinnamon; fill the crust; bake 375°F ~50 min.
+  tags: [dessert, american]
+  gerd: low
+  macros: { calories: 320, protein: 3 }
+  servings: 8
+  photo: apple-pie.png
+
+- name: Banana bread
+  ingredients: [flour, banana, sugar, egg, butter]
+  note: Mash ripe bananas; mix wet then dry; bake 350°F ~60 min in a loaf tin.
+  tags: [dessert, breakfast, american, easy]
+  gerd: medium
+  macros: { calories: 260, protein: 4 }
+  servings: 10
+  photo: banana-bread.jpg
+
+- name: Cheesecake
+  ingredients: [cream cheese, sugar, eggs, graham crackers, butter]
+  note: Press a crumb base; pour over the beaten cream-cheese filling; bake low ~60 min; chill.
+  tags: [dessert, american]
+  gerd: low
+  macros: { calories: 420, protein: 7 }
+  servings: 12
+  photo: cheesecake.jpg

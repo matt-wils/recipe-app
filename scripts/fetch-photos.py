@@ -65,6 +65,36 @@ MANIFEST = {
     "shakshuka": "Shakshouka",
     "butter-chicken": "Butter chicken",
     "margherita-pizza": "Pizza Margherita",
+    # healthy & gerd-friendly
+    "buddha-bowl": "Buddha bowl",
+    "poke-bowl": "Poke (dish)",
+    "lentil-soup": "Lentil soup",
+    "hummus": "Hummus",
+    "avocado-toast": "Avocado toast",
+    "roast-chicken": "Roast chicken",
+    "quinoa-salad": "Tabbouleh",
+    # common staples
+    "spaghetti-and-meatballs": "Spaghetti and meatballs",
+    "macaroni-and-cheese": "Macaroni and cheese",
+    "cheeseburger": "Cheeseburger",
+    "lasagna": "Lasagne",
+    "spaghetti-carbonara": "Carbonara",
+    "fried-chicken": "Fried chicken",
+    "beef-and-broccoli": "Beef and broccoli",
+    "chicken-curry": "Chicken tikka masala",
+    "chili-con-carne": "Chili con carne",
+    "chicken-quesadilla": "Quesadilla",
+    "french-toast": "French toast",
+    "caesar-salad": "Caesar salad",
+    "ramen": "Ramen",
+    "beef-pho": "Pho",
+    "sweet-and-sour-pork": "Sweet and sour pork",
+    # desserts
+    "chocolate-chip-cookies": "Chocolate chip cookie",
+    "brownies": "Chocolate brownie",
+    "apple-pie": "Apple pie",
+    "banana-bread": "Banana bread",
+    "cheesecake": "Cheesecake",
 }
 
 
