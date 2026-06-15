@@ -6,18 +6,23 @@ name: Dependabot Auto-merge
 #   write access — only pull_request_target provides that. This is the standard
 #   Dependabot auto-merge pattern endorsed by GitHub Actions docs.
 #
+# Policy: auto-merge EVERY Dependabot PR (any update type, prod or dev) once CI
+# is green. No semver gate — branch protection's required `ci` check is the only
+# guard, so a bump that breaks lint/types/tests/build can never land. Coupled
+# packages (react/react-dom, vitest/coverage-v8) are grouped in dependabot.yml
+# so a major bump arrives as one installable PR rather than ERESOLVE-conflicting
+# halves.
+#
 # Mitigations against pull_request_target abuse:
 #   1. Hard actor check (if: github.actor == 'dependabot[bot]') — skips the job
 #      entirely for any non-Dependabot PR, preventing the elevated context from
 #      being triggered by external contributors or forks.
-#   2. fetch-metadata action is pinned to a specific commit SHA (not a mutable
-#      tag) — prevents a supply-chain compromise via tag override.
-#   3. Semver gate — auto-merge fires only for patch/minor updates; major bumps
-#      stay open as regular PRs for manual review and testing.
-#   4. Minimal permissions scope — only contents: write + pull-requests: write,
+#   2. Minimal permissions scope — only contents: write + pull-requests: write,
 #      the two scopes `gh pr merge --auto` needs (contents to queue the merge and
 #      read the PR's commits, pull-requests to enable auto-merge). No other
 #      elevated scopes. The hard actor gate above keeps this context Dependabot-only.
+#   3. No checkout of PR head and no third-party actions — the job only calls the
+#      gh CLI, so untrusted PR code never executes in this elevated context.
 #
 # Auto-merge only *queues* the merge: the branch-protected `ci` check must pass
 # first, so a dependency bump that breaks lint/types/tests/build never lands.
@@ -35,21 +40,9 @@ jobs:
     # Hard gate: skip entirely for non-Dependabot PRs.
     if: github.actor == 'dependabot[bot]'
     steps:
-      - name: Fetch Dependabot metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3
-        with:
-          github-token: '${{ secrets.GITHUB_TOKEN }}'
-
       # Queue auto-merge — GitHub merges only after all required CI checks pass.
-      - name: Enable auto-merge (minor and patch only)
-        if: |
-          steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
-          steps.metadata.outputs.update-type == 'version-update:semver-minor'
+      - name: Enable auto-merge
         run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Major version bumps reach here but the step above is skipped, so they
-      # stay open as a regular PR for manual review.

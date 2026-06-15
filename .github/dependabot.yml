@@ -10,6 +10,24 @@ updates:
       time: '06:00'
       timezone: 'America/Chicago'
     groups:
+      # Interdependent packages that MUST move version together — Dependabot
+      # otherwise splits a major bump into one PR per package, and each half
+      # fails `npm ci` with an ERESOLVE peer conflict (react@19 needs
+      # react-dom@19; @vitest/coverage-v8 pins an exact `peer vitest`). These
+      # groups carry NO update-types filter, so they bundle major bumps too —
+      # the whole point is to keep the coupled set in a single installable PR.
+      react:
+        patterns:
+          - 'react'
+          - 'react-dom'
+          - '@types/react'
+          - '@types/react-dom'
+      vitest:
+        patterns:
+          - 'vitest'
+          - '@vitest/*'
+      # Everything else: fold routine minor/patch bumps into one PR. Major
+      # bumps of other packages still open as individual PRs for review.
       npm-minor-and-patch:
         applies-to: version-updates
         update-types: ['minor', 'patch']
