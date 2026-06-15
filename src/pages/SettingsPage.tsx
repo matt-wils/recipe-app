@@ -2,17 +2,25 @@ import { useEffect, useState } from 'react';
 import { HardDrive, ShieldCheck, BookOpen } from 'lucide-react';
 import { PageHeader } from '../components/layout/PageHeader';
 import { useRecipes } from '../hooks/useRecipes';
+import { formatBytes, usageBuckets, type UsageBucket, type UsageDetails } from '../utils/storage';
+
+interface UsageState {
+  used: number;
+  persisted: boolean;
+  buckets: UsageBucket[];
+}
 
 export function SettingsPage() {
   const { recipes } = useRecipes();
-  const [usage, setUsage] = useState<{ used: number; persisted: boolean } | null>(null);
+  const [usage, setUsage] = useState<UsageState | null>(null);
 
   useEffect(() => {
     void (async () => {
       if (navigator.storage?.estimate) {
         const est = await navigator.storage.estimate();
         const persisted = (await navigator.storage.persisted?.()) ?? false;
-        setUsage({ used: est.usage ?? 0, persisted });
+        const details = (est as { usageDetails?: UsageDetails }).usageDetails;
+        setUsage({ used: est.usage ?? 0, persisted, buckets: usageBuckets(details) });
       }
     })();
   }, []);
@@ -37,8 +45,24 @@ export function SettingsPage() {
           <section className="flex flex-col gap-2">
             <h2 className="text-sm font-semibold text-gray-500">Storage</h2>
             <div className="flex items-center gap-2 text-sm text-gray-700">
-              <HardDrive size={16} /> {(usage.used / 1024 / 1024).toFixed(1)} MB used
+              <HardDrive size={16} /> {formatBytes(usage.used)} used
             </div>
+            {usage.buckets.length > 0 ? (
+              <ul className="ml-6 flex flex-col gap-1 text-xs text-gray-500">
+                {usage.buckets.map((bucket) => (
+                  <li key={bucket.key} className="flex justify-between">
+                    <span>{bucket.label}</span>
+                    <span>{formatBytes(bucket.bytes)}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-xs text-gray-500">
+                This is a rough total reported by your browser. It includes the offline app cache
+                and browser padding, so it’s usually far larger than the recipe data actually kept
+                on this device (your favorites and history are only a few KB).
+              </p>
+            )}
             <div className="flex items-center gap-2 text-sm text-gray-700">
               <ShieldCheck size={16} />
               {usage.persisted
