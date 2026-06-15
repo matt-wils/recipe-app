@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Shuffle, Check, ChefHat, SlidersHorizontal } from 'lucide-react';
+import { Shuffle, Check, ChefHat, SlidersHorizontal, ShoppingCart } from 'lucide-react';
 import { PageHeader } from '../components/layout/PageHeader';
 import { TagPill } from '../components/ui/TagPill';
 import { EmptyState } from '../components/ui/EmptyState';
 import { useRecipes } from '../hooks/useRecipes';
 import { useRecipeState } from '../hooks/useRecipeState';
+import { useShoppingList } from '../hooks/useShoppingList';
 import { pickRecipe, type ShuffleFilters } from '../utils/shuffle';
 import { displayPhotoUrl } from '../data/library';
 import { TAG_DIMENSION_ORDER, TAG_DIMENSIONS, GERD_LEVELS, GERD_SHORT_LABELS } from '../data/tags';
@@ -14,6 +15,7 @@ import type { GerdLevel, Recipe } from '../types';
 export function HomePage() {
   const { recipes } = useRecipes();
   const { lastCooked, markCooked } = useRecipeState();
+  const { ids: shoppingIds, addRecipe, removeRecipe } = useShoppingList();
   // Default the nightly shuffle to dinner; the user can clear it in the filters.
   const [filters, setFilters] = useState<ShuffleFilters>({ tags: ['dinner'], gerd: [] });
   const [showFilters, setShowFilters] = useState(false);
@@ -120,7 +122,18 @@ export function HomePage() {
         )}
 
         {pick ? (
-          <PickCard recipe={pick} justCooked={justCooked} onMadeIt={onMadeIt} onShuffle={shuffle} />
+          <PickCard
+            recipe={pick}
+            justCooked={justCooked}
+            onMadeIt={onMadeIt}
+            onShuffle={shuffle}
+            onShoppingList={shoppingIds.has(pick.id)}
+            onToggleList={() =>
+              void (shoppingIds.has(pick.id)
+                ? removeRecipe(pick.id)
+                : addRecipe(pick.id, pick.servings))
+            }
+          />
         ) : (
           <EmptyState
             icon={<ChefHat size={40} />}
@@ -142,11 +155,15 @@ function PickCard({
   justCooked,
   onMadeIt,
   onShuffle,
+  onShoppingList,
+  onToggleList,
 }: {
   recipe: Recipe;
   justCooked: boolean;
   onMadeIt: () => void;
   onShuffle: () => void;
+  onShoppingList: boolean;
+  onToggleList: () => void;
 }) {
   const photo = displayPhotoUrl(recipe);
   return (
@@ -197,6 +214,14 @@ function PickCard({
             <Shuffle size={18} /> Shuffle
           </button>
         </div>
+        <button
+          onClick={onToggleList}
+          className={`flex h-11 items-center justify-center gap-1.5 rounded-xl font-medium active:bg-gray-200 ${
+            onShoppingList ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-700'
+          }`}
+        >
+          <ShoppingCart size={18} /> {onShoppingList ? 'On shopping list' : 'Add to list'}
+        </button>
       </div>
     </div>
   );

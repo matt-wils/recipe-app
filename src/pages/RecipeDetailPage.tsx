@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Heart, Check } from 'lucide-react';
+import { Heart, Check, ShoppingCart } from 'lucide-react';
 import { PageHeader } from '../components/layout/PageHeader';
 import { ServingScaler } from '../components/recipe/ServingScaler';
 import { NotesView } from '../components/recipe/NotesView';
@@ -8,6 +8,7 @@ import { TagPill } from '../components/ui/TagPill';
 import { EmptyState } from '../components/ui/EmptyState';
 import { useRecipe } from '../hooks/useRecipe';
 import { useRecipeState } from '../hooks/useRecipeState';
+import { useShoppingList } from '../hooks/useShoppingList';
 import { scaleAmount, formatAmount } from '../utils/scaling';
 import { relativeDays } from '../utils/relativeTime';
 import { GERD_LABELS } from '../data/tags';
@@ -16,6 +17,7 @@ export function RecipeDetailPage() {
   const { id } = useParams();
   const { recipe, photo } = useRecipe(id);
   const { favorites, lastCooked, toggleFavorite, markCooked } = useRecipeState();
+  const { ids: shoppingIds, addRecipe, removeRecipe } = useShoppingList();
   const [servings, setServings] = useState<number | null>(null);
 
   if (!recipe) {
@@ -30,6 +32,7 @@ export function RecipeDetailPage() {
   const currentServings = servings ?? recipe.servings;
   const scalable = recipe.ingredients.some((ing) => ing.amount != null);
   const isFavorite = favorites.has(recipe.id);
+  const onShoppingList = shoppingIds.has(recipe.id);
   const cookedAt = lastCooked[recipe.id];
   const macros = recipe.macros;
 
@@ -91,6 +94,18 @@ export function RecipeDetailPage() {
             className="flex h-11 items-center justify-center gap-1.5 rounded-xl bg-emerald-600 font-semibold text-white active:bg-emerald-700"
           >
             <Check size={18} /> Made it today
+          </button>
+          <button
+            onClick={() =>
+              void (onShoppingList
+                ? removeRecipe(recipe.id)
+                : addRecipe(recipe.id, currentServings))
+            }
+            className={`flex h-11 items-center justify-center gap-1.5 rounded-xl font-medium active:bg-gray-200 ${
+              onShoppingList ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-700'
+            }`}
+          >
+            <ShoppingCart size={18} /> {onShoppingList ? 'On shopping list' : 'Add to list'}
           </button>
           {cookedAt && (
             <p className="text-center text-sm text-gray-500">

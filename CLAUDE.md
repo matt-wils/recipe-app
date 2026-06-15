@@ -11,9 +11,14 @@ IndexedDB (via `idb`).
   and exposed through `src/data/library.ts`. There is **no** in-app create/edit/delete
   and recipes are **not** stored in IndexedDB (this replaced the old local recipe
   store — commit `95a7beb`). Don't reintroduce a recipe write path.
-- **IndexedDB holds only per-device state** — last-cooked timestamps and favorites
-  (`src/db/state.ts`), plus the backup-reminder meta. It's a derived cache, not a
-  source of truth: losing it resets shuffle weighting/filters, never a recipe.
+- **IndexedDB holds only per-device state** — last-cooked timestamps, favorites, and
+  the shopping list (`src/db/state.ts`), plus the backup-reminder meta. It's a derived
+  cache, not a source of truth: losing it resets shuffle weighting/filters, never a recipe.
+- **The shopping list stores recipe _references_, not materialized items.** Its meta keys
+  (`shoppingList` = `{ id, servings }[]`, `shoppingListChecked` = normalized-name keys)
+  point at read-only recipes; the grouped, amount-summed list is _derived_ on render by
+  `aggregateShoppingList` (`src/utils/shopping.ts`). This is not a recipe write path — don't
+  turn it into one.
 - The tag vocabulary is controlled (`src/data/tags.ts`). An unknown tag in
   `recipes.yaml` **fails the build** — that's intentional; add the tag there first.
 
@@ -112,8 +117,14 @@ React / Vite:
   `src/components/layout/BottomNav.tsx`.
 - **Add per-device state** → a keyed helper in `src/db/state.ts` over `getMeta`/`setMeta`; expose
   via a hook in `src/hooks/` if a component needs it.
-- **Pure logic** → `src/utils/` (matching, scaling, shuffle, sort, normalize). These are the
-  unit-tested + mutation-tested core; keep new pure logic here.
+- **Shopping list** → aggregation/grouping logic is `src/utils/shopping.ts` (`aggregateShoppingList`,
+  merges like names via `normalize`, sums same-unit amounts, annotates `+ more`/`from N recipes`);
+  the ingredient→store-section taxonomy is `src/data/ingredient-categories.ts` (`categorize` +
+  `CATEGORY_ORDER`). When a new ingredient lands in `Other`, add a keyword to the right `RULES`
+  entry there (rules are priority-ordered to resolve multi-word conflicts). State lives in
+  `src/db/state.ts`, surfaced by `useShoppingList`; the page is `src/pages/ShoppingListPage.tsx`.
+- **Pure logic** → `src/utils/` (matching, scaling, shuffle, sort, normalize, shopping). These are
+  the unit-tested + mutation-tested core; keep new pure logic here.
 
 ## Running / tests / CI
 
