@@ -8,6 +8,7 @@ import { TagPill } from '../components/ui/TagPill';
 import { EmptyState } from '../components/ui/EmptyState';
 import { useRecipes } from '../hooks/useRecipes';
 import { useRecipeState } from '../hooks/useRecipeState';
+import { useShoppingList } from '../hooks/useShoppingList';
 import { sortRecipes } from '../utils/sortRecipes';
 import { TAG_DIMENSION_ORDER, TAG_DIMENSIONS } from '../data/tags';
 import type { SortField, SortOrder } from '../types';
@@ -15,6 +16,7 @@ import type { SortField, SortOrder } from '../types';
 export function RecipeListPage() {
   const { recipes } = useRecipes();
   const { lastCooked, favorites } = useRecipeState();
+  const { ids: shoppingIds, addRecipe, removeRecipe } = useShoppingList();
   const [field, setField] = useState<SortField>('name');
   const [order, setOrder] = useState<SortOrder>('asc');
   const [params, setParams] = useSearchParams();
@@ -93,7 +95,15 @@ export function RecipeListPage() {
           )}
 
           {visible.map((r) => (
-            <RecipeCard key={r.id} recipe={r} favorite={favorites.has(r.id)} />
+            <RecipeCard
+              key={r.id}
+              recipe={r}
+              favorite={favorites.has(r.id)}
+              onList={shoppingIds.has(r.id)}
+              onToggleList={() =>
+                void (shoppingIds.has(r.id) ? removeRecipe(r.id) : addRecipe(r.id, r.servings))
+              }
+            />
           ))}
         </div>
       )}

@@ -5,6 +5,7 @@ import { RecipeListPage } from './pages/RecipeListPage';
 import { RecipeDetailPage } from './pages/RecipeDetailPage';
 import { MatcherPage } from './pages/MatcherPage';
 import { CommonIngredientsPage } from './pages/CommonIngredientsPage';
+import { ShoppingListPage } from './pages/ShoppingListPage';
 import { SettingsPage } from './pages/SettingsPage';
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="recipe/:id" element={<RecipeDetailPage />} />
         <Route path="matcher" element={<MatcherPage />} />
         <Route path="common" element={<CommonIngredientsPage />} />
+        <Route path="shopping-list" element={<ShoppingListPage />} />
         <Route path="settings" element={<SettingsPage />} />
       </Route>
     </Routes>
