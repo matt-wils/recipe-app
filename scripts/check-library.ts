@@ -50,7 +50,8 @@ function main(): number {
   // not per-recipe photos, so it's never an orphan.
   const onDisk = existsSync(PHOTO_DIR)
     ? readdirSync(PHOTO_DIR).filter(
-        (f) => !f.startsWith('.') && f !== 'README.md' && f !== 'placeholders',
+        (f) =>
+          !f.startsWith('.') && f !== 'README.md' && f !== 'CREDITS.md' && f !== 'placeholders',
       )
     : [];
   const orphans = onDisk.filter((f) => !referenced.has(f));

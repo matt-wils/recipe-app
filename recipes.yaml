@@ -11,6 +11,7 @@
 #   macros      (optional) — { calories, protein } per serving
 #   servings    (optional) — defaults to 4
 #   photo       (optional) — filename under public/recipe-photos/
+#                            (see CREDITS.md for the bundled photos' sources)
 
 - name: Shredded chicken, beans & rice
   ingredients: [chicken thighs, vegetable broth, white beans, white rice]
@@ -19,6 +20,7 @@
   gerd: high
   macros: { calories: 520, protein: 38 }
   servings: 4
+  photo: shredded-chicken-beans-rice.jpg
 
 - name: Sheet-pan sausage & peppers
   ingredients:
@@ -30,6 +32,7 @@
   tags: [pork, american, dinner]
   gerd: low
   macros: { calories: 480, protein: 28 }
+  photo: sheet-pan-sausage-peppers.jpg
 
 - name: Salmon & broccoli traybake
   ingredients:
@@ -41,6 +44,7 @@
   tags: [fish, easy, dinner]
   gerd: medium
   macros: { calories: 410, protein: 34 }
+  photo: salmon-broccoli-traybake.jpg
 
 - name: Oatmeal with banana & peanut butter
   ingredients:
@@ -53,6 +57,7 @@
   gerd: high
   macros: { calories: 380, protein: 14 }
   servings: 1
+  photo: oatmeal-banana-pb.jpg
 
 - name: Ground beef tacos
   ingredients: [ground beef, taco shells, cheddar, lettuce, tomato]
@@ -60,6 +65,7 @@
   tags: [beef, mexican, dinner]
   gerd: low
   macros: { calories: 560, protein: 30 }
+  photo: ground-beef-tacos.jpg
 
 - name: Pesto pasta with peas
   ingredients:
@@ -71,6 +77,7 @@
   tags: [veg, easy, italian, dinner]
   gerd: medium
   macros: { calories: 520, protein: 18 }
+  photo: pesto-pasta-peas.jpg
 
 - name: Greek yogurt bowl
   ingredients: [greek yogurt, honey, granola, blueberries]
@@ -79,6 +86,7 @@
   gerd: high
   macros: { calories: 320, protein: 22 }
   servings: 1
+  photo: greek-yogurt-bowl.jpg
 
 - name: Slow cooker pulled pork
   ingredients:
@@ -90,3 +98,236 @@
   gerd: low
   macros: { calories: 610, protein: 40 }
   servings: 6
+  photo: slow-cooker-pulled-pork.jpg
+
+# --- Reflux-friendly & simple ---------------------------------------------
+
+- name: Ginger chicken congee
+  ingredients: [chicken breast, white rice, ginger, vegetable broth, scallion]
+  note: Simmer rice in broth with ginger ~45 min to a porridge; stir in poached shredded chicken.
+  tags: [chicken, chinese, dinner, easy]
+  gerd: high
+  macros: { calories: 300, protein: 26 }
+  servings: 4
+  photo: ginger-chicken-congee.jpg
+
+- name: Steamed cod with bok choy
+  ingredients: [cod fillets, bok choy, ginger, scallion, sesame oil]
+  note: Steam cod with ginger ~8 min; wilt bok choy; finish with a little sesame oil.
+  tags: [fish, chinese, dinner, easy]
+  gerd: high
+  macros: { calories: 220, protein: 30 }
+  servings: 4
+  photo: steamed-cod-bok-choy.jpg
+
+- name: Banana oat pancakes
+  ingredients: [rolled oats, banana, eggs, milk]
+  note: Blend oats, banana and egg; cook like small pancakes.
+  tags: [breakfast, american, easy]
+  gerd: high
+  macros: { calories: 350, protein: 14 }
+  servings: 2
+  photo: banana-oat-pancakes.jpg
+
+- name: Melon & cottage cheese bowl
+  ingredients: [cantaloupe, cottage cheese, honey]
+  note: Scoop melon over cottage cheese; drizzle with honey.
+  tags: [snack, easy]
+  gerd: high
+  macros: { calories: 220, protein: 18 }
+  servings: 1
+  photo: melon-cottage-cheese.jpg
+
+- name: Chicken & rice soup
+  ingredients: [chicken breast, white rice, carrot, celery, vegetable broth]
+  note: Simmer chicken, rice and veg in broth ~30 min; shred the chicken back in.
+  tags: [chicken, american, lunch, easy]
+  gerd: high
+  macros: { calories: 280, protein: 24 }
+  servings: 4
+  photo: chicken-rice-soup.jpg
+
+# --- American --------------------------------------------------------------
+
+- name: Cobb salad
+  ingredients: [chicken breast, egg, avocado, bacon, lettuce, blue cheese]
+  note: Pile chopped rows over greens; dress lightly.
+  tags: [chicken, american, lunch]
+  gerd: medium
+  macros: { calories: 480, protein: 34 }
+  servings: 2
+  photo: cobb-salad.jpg
+
+# --- Chinese ---------------------------------------------------------------
+
+- name: Mapo tofu
+  ingredients: [firm tofu, ground pork, doubanjiang, scallion]
+  note: Fry pork, add bean paste then tofu; simmer. Garlic + Sichuan pepper to taste.
+  tags: [pork, chinese, dinner]
+  gerd: low
+  macros: { calories: 320, protein: 22 }
+  servings: 4
+  photo: mapo-tofu.jpg
+
+- name: Egg fried rice
+  ingredients: [day-old rice, eggs, frozen peas, scallion, soy sauce]
+  note: Scramble egg, add cold rice and peas; splash of soy over high heat.
+  tags: [veg, chinese, dinner, easy]
+  gerd: medium
+  macros: { calories: 380, protein: 12 }
+  servings: 4
+  photo: egg-fried-rice.jpg
+
+# --- Japanese --------------------------------------------------------------
+
+- name: Salmon teriyaki
+  ingredients: [salmon fillets, soy sauce, mirin, sugar, ginger]
+  note: Pan-sear salmon; glaze with reduced soy, mirin and sugar.
+  tags: [fish, japanese, dinner, easy]
+  gerd: medium
+  macros: { calories: 400, protein: 32 }
+  servings: 4
+  photo: salmon-teriyaki.jpg
+
+- name: Miso soup
+  ingredients: [dashi, miso paste, silken tofu, wakame, scallion]
+  note: Heat dashi, whisk in miso off the boil; add tofu and wakame.
+  tags: [veg, japanese, easy]
+  gerd: medium
+  macros: { calories: 80, protein: 6 }
+  servings: 4
+  photo: miso-soup.jpg
+
+- name: Tamagoyaki
+  ingredients: [eggs, mirin, dashi, soy sauce]
+  note: Cook thin layers of seasoned egg, rolling each into the last in a square pan.
+  tags: [breakfast, japanese, easy]
+  gerd: medium
+  macros: { calories: 180, protein: 12 }
+  servings: 2
+  photo: tamagoyaki.jpg
+
+- name: Tonkatsu pork cutlet
+  ingredients: [pork loin, flour, egg, panko]
+  note: Bread the cutlets and shallow-fry until golden; rest, then slice.
+  tags: [pork, japanese, dinner]
+  gerd: low
+  macros: { calories: 520, protein: 34 }
+  servings: 4
+  photo: tonkatsu.jpg
+
+# --- Korean ----------------------------------------------------------------
+
+- name: Bibimbap
+  ingredients: [white rice, beef, spinach, carrot, egg, gochujang, sesame oil]
+  note: Top rice with sautéed veg and beef; add a fried egg; gochujang to taste.
+  tags: [beef, korean, dinner]
+  gerd: medium
+  macros: { calories: 520, protein: 26 }
+  servings: 4
+  photo: bibimbap.jpg
+
+- name: Bulgogi
+  ingredients: [thin beef, soy sauce, pear, sesame oil, scallion]
+  note: Marinate beef in soy, grated pear and sesame; sear hot and fast.
+  tags: [beef, korean, dinner]
+  gerd: medium
+  macros: { calories: 450, protein: 30 }
+  servings: 4
+  photo: bulgogi.jpg
+
+- name: Kimchi fried rice
+  ingredients: [cooked rice, kimchi, egg, scallion, sesame oil]
+  note: Fry kimchi, add rice; top with a fried egg.
+  tags: [korean, dinner, easy]
+  gerd: low
+  macros: { calories: 420, protein: 12 }
+  servings: 2
+  photo: kimchi-fried-rice.jpg
+
+# --- German ----------------------------------------------------------------
+
+- name: Pork schnitzel
+  ingredients: [pork cutlets, flour, egg, breadcrumbs, lemon]
+  note: Pound thin, bread, and fry in butter; lemon to serve.
+  tags: [pork, german, dinner]
+  gerd: low
+  macros: { calories: 480, protein: 34 }
+  servings: 4
+  photo: pork-schnitzel.jpg
+
+- name: Bratwurst & sauerkraut
+  ingredients: [bratwurst, sauerkraut, onion, mustard]
+  note: Brown the brats; simmer with kraut and sliced onion.
+  tags: [pork, german, dinner, easy]
+  gerd: low
+  macros: { calories: 520, protein: 22 }
+  servings: 4
+  photo: bratwurst-sauerkraut.jpg
+
+- name: Spätzle with butter
+  ingredients: [flour, eggs, milk, butter]
+  note: Scrape batter into boiling water; toss the cooked noodles in butter and nutmeg.
+  tags: [veg, german, dinner, easy]
+  gerd: medium
+  macros: { calories: 380, protein: 12 }
+  servings: 4
+  photo: spaetzle.jpg
+
+# --- Mexican ---------------------------------------------------------------
+
+- name: Chicken fajitas
+  ingredients: [chicken breast, bell peppers, onion, tortillas, lime]
+  note: Sear chicken and peppers; serve in warm tortillas with lime.
+  tags: [chicken, mexican, dinner]
+  gerd: low
+  macros: { calories: 480, protein: 32 }
+  servings: 4
+  photo: chicken-fajitas.jpg
+
+- name: Huevos rancheros
+  ingredients: [eggs, corn tortillas, salsa, black beans]
+  note: Fried eggs over tortillas with warm beans and salsa.
+  tags: [breakfast, mexican]
+  gerd: low
+  macros: { calories: 420, protein: 18 }
+  servings: 2
+  photo: huevos-rancheros.jpg
+
+# --- A few surprises -------------------------------------------------------
+
+- name: Pad thai
+  ingredients: [rice noodles, shrimp, egg, bean sprouts, peanuts, tamarind paste]
+  note: Stir-fry soaked noodles with tamarind sauce, egg and shrimp; top with peanuts.
+  tags: [fish, asian, dinner]
+  gerd: low
+  macros: { calories: 520, protein: 22 }
+  servings: 4
+  photo: pad-thai.jpg
+
+- name: Shakshuka
+  ingredients: [eggs, tomato, bell pepper, onion]
+  note: Poach eggs in a spiced tomato-and-pepper sauce; paprika to taste.
+  tags: [breakfast, mediterranean, veg]
+  gerd: low
+  macros: { calories: 300, protein: 16 }
+  servings: 2
+  photo: shakshuka.jpg
+
+- name: Butter chicken
+  ingredients: [chicken thighs, tomato, cream, butter]
+  note: Simmer chicken in a spiced tomato-cream sauce; garam masala to taste.
+  tags: [chicken, indian, dinner]
+  gerd: low
+  macros: { calories: 560, protein: 34 }
+  servings: 4
+  photo: butter-chicken.jpg
+
+- name: Margherita pizza
+  ingredients: [pizza dough, tomato, mozzarella, basil]
+  note: Top dough with crushed tomato and mozzarella; bake hot; basil to finish.
+  tags: [veg, italian, dinner]
+  gerd: low
+  macros: { calories: 600, protein: 22 }
+  servings: 2
+  photo: margherita-pizza.jpg
