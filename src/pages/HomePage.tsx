@@ -8,13 +8,14 @@ import { useRecipes } from '../hooks/useRecipes';
 import { useRecipeState } from '../hooks/useRecipeState';
 import { pickRecipe, type ShuffleFilters } from '../utils/shuffle';
 import { displayPhotoUrl } from '../data/library';
-import { TAG_DIMENSION_ORDER, TAG_DIMENSIONS, GERD_LEVELS, GERD_LABELS } from '../data/tags';
+import { TAG_DIMENSION_ORDER, TAG_DIMENSIONS, GERD_LEVELS, GERD_SHORT_LABELS } from '../data/tags';
 import type { GerdLevel, Recipe } from '../types';
 
 export function HomePage() {
   const { recipes } = useRecipes();
   const { lastCooked, markCooked } = useRecipeState();
-  const [filters, setFilters] = useState<ShuffleFilters>({ tags: [], gerd: [] });
+  // Default the nightly shuffle to dinner; the user can clear it in the filters.
+  const [filters, setFilters] = useState<ShuffleFilters>({ tags: ['dinner'], gerd: [] });
   const [showFilters, setShowFilters] = useState(false);
   const [pick, setPick] = useState<Recipe | undefined>();
   const [justCooked, setJustCooked] = useState(false);
@@ -110,7 +111,7 @@ export function HomePage() {
                     active={filters.gerd.includes(level)}
                     onClick={() => toggleGerd(level)}
                   >
-                    {GERD_LABELS[level]}
+                    {GERD_SHORT_LABELS[level]}
                   </TagPill>
                 ))}
               </div>

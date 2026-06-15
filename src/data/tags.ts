@@ -44,6 +44,17 @@ export const GERD_LABELS: Record<GerdLevel, string> = {
   low: 'Reflux-risky',
 };
 
+/**
+ * Short GERD labels for use under an explicit "reflux" group header, where the
+ * "Reflux-" prefix in GERD_LABELS would be redundant. Use GERD_LABELS for
+ * standalone badges (e.g. the recipe detail page) that lack that context.
+ */
+export const GERD_SHORT_LABELS: Record<GerdLevel, string> = {
+  high: 'Friendly',
+  medium: 'Moderate',
+  low: 'Risky',
+};
+
 /** The dimension a given tag belongs to, or undefined if unknown. */
 export function tagDimension(tag: string): TagDimension | undefined {
   return (Object.keys(TAG_DIMENSIONS) as TagDimension[]).find((dim) =>
