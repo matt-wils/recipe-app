@@ -11,7 +11,18 @@ import type { GerdLevel } from '../types';
  */
 export const TAG_DIMENSIONS = {
   meal: ['breakfast', 'lunch', 'dinner', 'snack', 'dessert'],
-  cuisine: ['mexican', 'american', 'italian', 'asian', 'mediterranean', 'indian'],
+  cuisine: [
+    'mexican',
+    'american',
+    'italian',
+    'asian',
+    'mediterranean',
+    'indian',
+    'chinese',
+    'japanese',
+    'korean',
+    'german',
+  ],
   protein: ['chicken', 'beef', 'pork', 'fish', 'veg'],
   effort: ['easy'],
 } as const;
