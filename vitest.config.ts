@@ -19,11 +19,14 @@ export default defineConfig({
       // excluding its Leaflet-coupled components from the coverage gate.
       include: ['src/utils/**', 'src/db/**', 'src/data/**'],
       exclude: ['**/__tests__/**', '**/*.d.ts'],
-      // Floors sit ~5 points below measured (stmts 85.8 / branch 89.2 / funcs 75)
+      // Floors sit ~5 points below measured (stmts 89.3 / branch 79 / funcs 92)
       // so an incidental dip doesn't redden CI; raise them as coverage grows.
+      // Vitest 4's v8 coverage is AST-aware, so it counts branches more
+      // granularly than v2 did — the branch % dropped (~92 → ~79) on identical
+      // code/tests, hence the lower branch floor here.
       thresholds: {
         statements: 80,
-        branches: 82,
+        branches: 74,
         functions: 68,
         lines: 80,
       },
