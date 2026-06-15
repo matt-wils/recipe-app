@@ -102,6 +102,12 @@ React / Vite:
 
 - **Add/change a recipe** → edit `recipes.yaml`; add any new tag to `src/data/tags.ts` first;
   `npm run check:library` to validate.
+- **Add a recipe photo** → drop a file in `public/recipe-photos/` and set `photo:` in
+  `recipes.yaml` (the filename must exist or `check:library` fails). With no `photo:`, the card
+  falls back to a generic per-category SVG via `displayPhotoUrl` (`src/data/library.ts`,
+  `public/recipe-photos/placeholders/`). The bundled real photos were sourced by
+  `scripts/fetch-photos.py` (Wikipedia/Wikimedia, recorded in `recipe-photos/CREDITS.md`) — re-run
+  it to add more, and keep CREDITS in sync for license attribution.
 - **Add a page/route** → component in `src/pages/`, wire the route in `src/App.tsx`, add nav in
   `src/components/layout/BottomNav.tsx`.
 - **Add per-device state** → a keyed helper in `src/db/state.ts` over `getMeta`/`setMeta`; expose
@@ -139,3 +145,9 @@ React / Vite:
   logic, not build-time glue.
 - **CI audits prod deps only** (`npm audit --omit=dev`): dev-tool vulns (eslint/stryker/vite-node)
   never reach the browser bundle, so gating on them is un-actionable red (ledger L-05).
+- **Sourcing photos from Wikimedia** (`scripts/fetch-photos.py`): it bursts → throttle and retry
+  on HTTP 429 (the script sleeps ~1.5s between dishes and backs off). Don't request arbitrary
+  thumbnail widths — Wikimedia now 400s with "use thumbnail sizes listed"; take the REST summary's
+  own `thumbnail.source`/`originalimage.source` and downscale locally (`sips -Z 640 …` on macOS).
+  Derive the saved file extension from the real Commons filename, not the thumb URL's last segment.
+  `check:library`'s orphan scan ignores the `placeholders/` subfolder and `CREDITS.md`.
