@@ -14,8 +14,10 @@ name: Dependabot Auto-merge
 #      tag) — prevents a supply-chain compromise via tag override.
 #   3. Semver gate — auto-merge fires only for patch/minor updates; major bumps
 #      stay open as regular PRs for manual review and testing.
-#   4. Minimal permissions scope — only pull-requests: write; no contents: write
-#      or other elevated scopes that could be exploited.
+#   4. Minimal permissions scope — only contents: write + pull-requests: write,
+#      the two scopes `gh pr merge --auto` needs (contents to queue the merge and
+#      read the PR's commits, pull-requests to enable auto-merge). No other
+#      elevated scopes. The hard actor gate above keeps this context Dependabot-only.
 #
 # Auto-merge only *queues* the merge: the branch-protected `ci` check must pass
 # first, so a dependency bump that breaks lint/types/tests/build never lands.
@@ -24,6 +26,7 @@ on:
     types: [opened, synchronize, reopened]
 
 permissions:
+  contents: write
   pull-requests: write
 
 jobs:
