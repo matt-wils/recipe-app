@@ -7,7 +7,7 @@ import { EmptyState } from '../components/ui/EmptyState';
 import { useRecipes } from '../hooks/useRecipes';
 import { useRecipeState } from '../hooks/useRecipeState';
 import { pickRecipe, type ShuffleFilters } from '../utils/shuffle';
-import { photoUrl } from '../data/library';
+import { displayPhotoUrl } from '../data/library';
 import { TAG_DIMENSION_ORDER, TAG_DIMENSIONS, GERD_LEVELS, GERD_LABELS } from '../data/tags';
 import type { GerdLevel, Recipe } from '../types';
 
@@ -147,12 +147,10 @@ function PickCard({
   onMadeIt: () => void;
   onShuffle: () => void;
 }) {
-  const photo = photoUrl(recipe);
+  const photo = displayPhotoUrl(recipe);
   return (
     <div className="flex flex-col gap-4 rounded-2xl bg-white p-4 shadow-sm">
-      {photo && (
-        <img src={photo} alt={recipe.name} className="h-48 w-full rounded-xl object-cover" />
-      )}
+      <img src={photo} alt={recipe.name} className="h-48 w-full rounded-xl object-cover" />
       <div>
         <h2 className="text-2xl font-bold leading-tight">{recipe.name}</h2>
         {recipe.notes && <p className="mt-1 text-sm text-gray-600">{recipe.notes}</p>}

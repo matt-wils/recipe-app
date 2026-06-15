@@ -9,6 +9,7 @@ import { EmptyState } from '../components/ui/EmptyState';
 import { useRecipes } from '../hooks/useRecipes';
 import { useRecipeState } from '../hooks/useRecipeState';
 import { sortRecipes } from '../utils/sortRecipes';
+import { TAG_DIMENSION_ORDER, TAG_DIMENSIONS } from '../data/tags';
 import type { SortField, SortOrder } from '../types';
 
 export function RecipeListPage() {
@@ -19,10 +20,16 @@ export function RecipeListPage() {
   const [params, setParams] = useSearchParams();
   const activeTag = params.get('tag');
 
-  const allTags = useMemo(
-    () => Array.from(new Set(recipes.flatMap((r) => r.tags))).sort(),
-    [recipes],
-  );
+  // Tags grouped by dimension (meal → cuisine → protein → effort) rather than a
+  // flat A→Z list, so meals read breakfast→dinner. Only render dimensions/tags
+  // that some recipe actually uses.
+  const tagGroups = useMemo(() => {
+    const used = new Set(recipes.flatMap((r) => r.tags));
+    return TAG_DIMENSION_ORDER.map((dim) => ({
+      dim,
+      tags: TAG_DIMENSIONS[dim].filter((t) => used.has(t)),
+    })).filter((g) => g.tags.length > 0);
+  }, [recipes]);
 
   const visible = useMemo(() => {
     const filtered = activeTag ? recipes.filter((r) => r.tags.includes(activeTag)) : recipes;
@@ -66,12 +73,21 @@ export function RecipeListPage() {
             />
           </div>
 
-          {allTags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
-              {allTags.map((t) => (
-                <TagPill key={t} active={activeTag === t} onClick={() => toggleTag(t)}>
-                  {t}
-                </TagPill>
+          {tagGroups.length > 0 && (
+            <div className="flex flex-col gap-2">
+              {tagGroups.map(({ dim, tags }) => (
+                <div key={dim}>
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                    {dim}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {tags.map((t) => (
+                      <TagPill key={t} active={activeTag === t} onClick={() => toggleTag(t)}>
+                        {t}
+                      </TagPill>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           )}

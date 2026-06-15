@@ -13,20 +13,13 @@ export const TAG_DIMENSIONS = {
   meal: ['breakfast', 'lunch', 'dinner', 'snack', 'dessert'],
   cuisine: ['mexican', 'american', 'italian', 'asian', 'mediterranean', 'indian'],
   protein: ['chicken', 'beef', 'pork', 'fish', 'veg'],
-  method: ['slow-cooker', 'sheet-pan', 'stovetop', 'grill', 'oven', 'no-cook'],
-  effort: ['easy', 'weeknight', 'project'],
+  effort: ['easy'],
 } as const;
 
 export type TagDimension = keyof typeof TAG_DIMENSIONS;
 
-/** Display order for facet groups. */
-export const TAG_DIMENSION_ORDER: TagDimension[] = [
-  'meal',
-  'cuisine',
-  'protein',
-  'method',
-  'effort',
-];
+/** Display order for facet groups (meal first so it reads breakfast→dinner). */
+export const TAG_DIMENSION_ORDER: TagDimension[] = ['meal', 'cuisine', 'protein', 'effort'];
 
 /** Flat set of every allowed tag, for validation. */
 export const ALLOWED_TAGS: ReadonlySet<string> = new Set(Object.values(TAG_DIMENSIONS).flat());

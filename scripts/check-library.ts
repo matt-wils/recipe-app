@@ -46,8 +46,12 @@ function main(): number {
   }
 
   // Orphaned photo files are bloat shipped to every user — warn, don't fail.
+  // `placeholders` is the generic-artwork subfolder (see src/data/library.ts),
+  // not per-recipe photos, so it's never an orphan.
   const onDisk = existsSync(PHOTO_DIR)
-    ? readdirSync(PHOTO_DIR).filter((f) => !f.startsWith('.') && f !== 'README.md')
+    ? readdirSync(PHOTO_DIR).filter(
+        (f) => !f.startsWith('.') && f !== 'README.md' && f !== 'placeholders',
+      )
     : [];
   const orphans = onDisk.filter((f) => !referenced.has(f));
 
