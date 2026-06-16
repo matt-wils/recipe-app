@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
+  addPlateToShoppingList,
   addRecipeToShoppingList,
   clearShoppingList,
   getCheckedItems,
+  getShoppingExtras,
   getShoppingList,
   pruneCheckedItems,
   removeRecipeFromShoppingList,
+  removeShoppingExtra,
   toggleCheckedItem,
   type ShoppingEntry,
 } from '../db';
@@ -17,15 +20,21 @@ import {
  */
 export function useShoppingList() {
   const [entries, setEntries] = useState<ShoppingEntry[]>([]);
+  const [extras, setExtras] = useState<string[]>([]);
   const [checked, setChecked] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let active = true;
     void (async () => {
-      const [list, checkedItems] = await Promise.all([getShoppingList(), getCheckedItems()]);
+      const [list, extraItems, checkedItems] = await Promise.all([
+        getShoppingList(),
+        getShoppingExtras(),
+        getCheckedItems(),
+      ]);
       if (!active) return;
       setEntries(list);
+      setExtras(extraItems);
       setChecked(checkedItems);
       setLoading(false);
     })();
@@ -47,8 +56,18 @@ export function useShoppingList() {
     setEntries(await removeRecipeFromShoppingList(id));
   }, []);
 
+  const addPlate = useCallback(async (names: string[]) => {
+    setExtras(await addPlateToShoppingList(names));
+  }, []);
+
+  const removeExtra = useCallback(async (name: string) => {
+    setExtras((prev) => prev.filter((n) => n !== name));
+    setExtras(await removeShoppingExtra(name));
+  }, []);
+
   const clear = useCallback(async () => {
     setEntries([]);
+    setExtras([]);
     setChecked(new Set());
     await clearShoppingList();
   }, []);
@@ -70,11 +89,14 @@ export function useShoppingList() {
 
   return {
     entries,
+    extras,
     ids,
     checked,
     loading,
     addRecipe,
     removeRecipe,
+    addPlate,
+    removeExtra,
     clear,
     toggleChecked,
     pruneChecked,

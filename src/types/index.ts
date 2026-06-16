@@ -23,6 +23,26 @@ export interface Recipe {
   photo?: string; // filename under public/recipe-photos/
 }
 
+export type PlateSlot = 'protein' | 'carb' | 'vegetable';
+
+export interface CookingMethod {
+  name: string; // e.g. "Maple-roasted"
+  how: string; // one-line guidance, e.g. "Toss with maple + oil, 400°F 25 min."
+}
+
+/**
+ * A build-a-plate component: a single ingredient (protein, carb, or veg) that
+ * doubles as a quick cooking reference via its `methods`. Authored in
+ * plates.yaml, validated at build by plugins/plate-loader.ts.
+ */
+export interface PlateComponent {
+  id: string; // slug derived from name
+  name: string;
+  slot: PlateSlot;
+  photo?: string; // filename under public/recipe-photos/
+  methods: CookingMethod[]; // a few ways to cook it
+}
+
 export interface MatchResult {
   recipe: Recipe;
   matchedCount: number;

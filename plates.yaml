@@ -1,0 +1,102 @@
+# Build-a-plate components — the simple protein / carb / vegetable building
+# blocks for an ad-hoc meal, each with a few quick ways to cook it (a grocery-
+# store-card style reference). These are NOT recipes (see recipes.yaml); they're
+# validated at build time by plugins/plate-loader.ts. Add a `photo:` (a file
+# under public/recipe-photos/) to override the per-slot placeholder.
+
+proteins:
+  - name: Chicken breast
+    methods:
+      - { name: Pan-seared, how: 'Salt, sear 6 min/side on medium-high until 165°F.' }
+      - { name: Baked, how: '400°F ~22 min; rest 5 min before slicing.' }
+      - { name: Poached, how: 'Simmer gently in broth 15 min, then shred.' }
+  - name: Chicken thighs
+    methods:
+      - { name: Roasted, how: 'Skin-up, 425°F 30–35 min until crisp.' }
+      - { name: Slow cooker, how: 'Low 4 hr with a splash of broth, then shred.' }
+  - name: Salmon
+    methods:
+      - { name: Roasted, how: '400°F 12–15 min until it flakes.' }
+      - { name: Pan-seared, how: 'Skin-down 4 min, flip 2 min, medium-high.' }
+      - { name: Glazed, how: 'Brush with soy + honey, broil 6–8 min.' }
+  - name: Ground beef
+    methods:
+      - { name: Browned, how: 'Sear in a dry hot pan, breaking up, ~8 min; drain.' }
+      - { name: Taco-spiced, how: 'Brown, then simmer with cumin + chili powder.' }
+  - name: Pork chops
+    methods:
+      - { name: Pan-seared, how: 'Sear 4 min/side, rest; pull at 145°F.' }
+      - { name: Baked, how: '400°F ~20 min depending on thickness.' }
+  - name: Eggs
+    methods:
+      - { name: Scrambled, how: 'Low heat, stir slowly, pull while just set.' }
+      - { name: Fried, how: 'Medium heat, baste with oil for crisp edges.' }
+      - { name: Hard-boiled, how: 'Boil 9 min, then ice bath; peel under water.' }
+  - name: Tofu
+    methods:
+      - { name: Air-fried, how: 'Cube, toss in cornstarch, 400°F 18 min.' }
+      - { name: Pan-crisped, how: 'Press dry, sear each side in hot oil until golden.' }
+  - name: Shrimp
+    methods:
+      - { name: Sauteed, how: 'High heat 2–3 min/side until pink and curled.' }
+      - { name: Roasted, how: 'Toss with oil, 400°F 8 min.' }
+
+carbs:
+  - name: Rice
+    methods:
+      - { name: Stovetop, how: '2:1 water, simmer covered 18 min, rest 5 min.' }
+      - { name: Rice cooker, how: 'Rinse, add water to line, press cook.' }
+  - name: Sweet potato
+    methods:
+      - { name: Roasted, how: 'Cube, toss in oil, 425°F 25–30 min.' }
+      - { name: Baked whole, how: 'Prick, 400°F ~45 min until soft.' }
+      - { name: Microwaved, how: 'Prick, 5–8 min, turning once.' }
+  - name: Pasta
+    methods:
+      - { name: Boiled, how: 'Salted boiling water, cook to package time, reserve a cup.' }
+  - name: Quinoa
+    methods:
+      - { name: Stovetop, how: 'Rinse, 2:1 water, simmer 15 min, fluff.' }
+  - name: Potatoes
+    methods:
+      - { name: Roasted, how: 'Cube, oil + salt, 425°F 35 min, flip once.' }
+      - { name: Mashed, how: 'Boil until fork-tender, mash with butter + milk.' }
+      - { name: Boiled, how: 'Cover with cold salted water, simmer 15–20 min.' }
+  - name: Couscous
+    methods:
+      - { name: Steamed, how: 'Pour equal boiling water/broth over, cover 5 min, fluff.' }
+
+vegetables:
+  - name: Broccoli
+    methods:
+      - { name: Roasted, how: 'Toss in oil, 425°F 18–20 min until charred.' }
+      - { name: Steamed, how: 'Steam 4–5 min until bright and tender-crisp.' }
+      - { name: Sauteed, how: 'High heat with garlic, 5 min, splash of water to finish.' }
+  - name: Brussels sprouts
+    methods:
+      - { name: Roasted, how: 'Halve, cut-side down, 425°F 22 min until crisp.' }
+      - { name: Air-fried, how: '400°F 14 min, shake halfway.' }
+  - name: Squash
+    methods:
+      - { name: Maple-roasted, how: 'Toss with maple + oil, 400°F 25 min.' }
+      - { name: Air-fried, how: '380°F 15 min, shake once.' }
+      - { name: Savory, how: 'Roast with garlic, olive oil + parmesan.' }
+  - name: Green beans
+    methods:
+      - { name: Sauteed, how: 'Blister in hot oil 5 min, finish with garlic.' }
+      - { name: Steamed, how: '4–5 min until tender-crisp, then salt.' }
+  - name: Asparagus
+    methods:
+      - { name: Roasted, how: 'Oil + salt, 425°F 10–12 min.' }
+      - { name: Grilled, how: 'High heat 3–4 min, rolling, until lightly charred.' }
+  - name: Spinach
+    methods:
+      - { name: Wilted, how: 'Toss in a hot pan with garlic 1–2 min until just wilted.' }
+  - name: Carrots
+    methods:
+      - { name: Roasted, how: 'Halve lengthwise, oil + honey, 425°F 25 min.' }
+      - { name: Steamed, how: 'Coins, 6–8 min until tender.' }
+  - name: Zucchini
+    methods:
+      - { name: Sauteed, how: "Coins in hot oil, 6–8 min until golden; don't crowd." }
+      - { name: Roasted, how: 'Oil + salt, 425°F 18 min.' }

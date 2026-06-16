@@ -32,6 +32,12 @@ export function matchesFilters(recipe: Recipe, filters: ShuffleFilters): boolean
   return true;
 }
 
+/** Pick one item uniformly at random. `rng` is injectable for tests. */
+export function pickRandom<T>(items: readonly T[], rng: () => number = Math.random): T | undefined {
+  if (items.length === 0) return undefined;
+  return items[Math.floor(rng() * items.length)];
+}
+
 /** Higher weight = more likely to be picked. Favors not-recently-cooked. */
 export function weightFor(recipe: Recipe, lastCooked: Record<string, number>, now: number): number {
   const cookedAt = lastCooked[recipe.id];

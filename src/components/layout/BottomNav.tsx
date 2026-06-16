@@ -1,12 +1,12 @@
 import { NavLink } from 'react-router-dom';
-import { Shuffle, BookOpen, Search, ShoppingCart, Settings } from 'lucide-react';
+import { Shuffle, BookOpen, Search, ShoppingCart, UtensilsCrossed } from 'lucide-react';
 
 const TABS = [
   { to: '/', label: 'Tonight', icon: Shuffle, end: true },
   { to: '/browse', label: 'Browse', icon: BookOpen, end: false },
   { to: '/matcher', label: 'Match', icon: Search, end: false },
+  { to: '/plate', label: 'Plate', icon: UtensilsCrossed, end: false },
   { to: '/shopping-list', label: 'Shopping', icon: ShoppingCart, end: false },
-  { to: '/settings', label: 'Settings', icon: Settings, end: false },
 ];
 
 export function BottomNav() {

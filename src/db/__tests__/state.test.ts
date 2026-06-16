@@ -11,6 +11,9 @@ import {
   getCheckedItems,
   toggleCheckedItem,
   pruneCheckedItems,
+  getShoppingExtras,
+  addPlateToShoppingList,
+  removeShoppingExtra,
 } from '../state';
 
 describe('favorites', () => {
@@ -66,12 +69,37 @@ describe('shopping list', () => {
     expect(await getShoppingList()).toEqual([{ id: 'r2', servings: 2 }]);
   });
 
-  it('clears the list and the checked items together', async () => {
+  it('clears the list, plate extras, and the checked items together', async () => {
     await addRecipeToShoppingList('r1', 4);
+    await addPlateToShoppingList(['Broccoli']);
     await toggleCheckedItem('chicken');
     await clearShoppingList();
     expect(await getShoppingList()).toEqual([]);
+    expect(await getShoppingExtras()).toEqual([]);
     expect([...(await getCheckedItems())]).toEqual([]);
+  });
+});
+
+describe('plate extras', () => {
+  it('starts empty', async () => {
+    expect(await getShoppingExtras()).toEqual([]);
+  });
+
+  it('adds plate component names and persists', async () => {
+    await addPlateToShoppingList(['Chicken', 'Rice', 'Broccoli']);
+    expect(await getShoppingExtras()).toEqual(['Chicken', 'Rice', 'Broccoli']);
+  });
+
+  it('dedupes by normalized name across adds', async () => {
+    await addPlateToShoppingList(['Broccoli']);
+    await addPlateToShoppingList(['broccoli', 'Rice']);
+    expect(await getShoppingExtras()).toEqual(['Broccoli', 'Rice']);
+  });
+
+  it('removes a single extra by normalized name', async () => {
+    await addPlateToShoppingList(['Chicken', 'Rice']);
+    await removeShoppingExtra('chicken');
+    expect(await getShoppingExtras()).toEqual(['Rice']);
   });
 });
 

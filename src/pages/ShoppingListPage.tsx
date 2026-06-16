@@ -10,8 +10,17 @@ import { aggregateShoppingList } from '../utils/shopping';
 
 export function ShoppingListPage() {
   const { recipes } = useRecipes();
-  const { entries, checked, loading, removeRecipe, clear, toggleChecked, pruneChecked } =
-    useShoppingList();
+  const {
+    entries,
+    extras,
+    checked,
+    loading,
+    removeRecipe,
+    removeExtra,
+    clear,
+    toggleChecked,
+    pruneChecked,
+  } = useShoppingList();
   const [confirmClear, setConfirmClear] = useState(false);
 
   const byId = useMemo(() => new Map(recipes.map((r) => [r.id, r])), [recipes]);
@@ -27,7 +36,7 @@ export function ShoppingListPage() {
         ),
     [entries, byId],
   );
-  const sections = useMemo(() => aggregateShoppingList(added), [added]);
+  const sections = useMemo(() => aggregateShoppingList(added, extras), [added, extras]);
 
   // Once loaded, drop any checked keys whose item is no longer on the list, so a
   // removed-then-re-added ingredient can't come back pre-checked.
@@ -41,14 +50,14 @@ export function ShoppingListPage() {
     return <PageHeader title="Shopping" />;
   }
 
-  if (added.length === 0) {
+  if (added.length === 0 && extras.length === 0) {
     return (
       <>
         <PageHeader title="Shopping" />
         <EmptyState
           icon={<ShoppingCart size={40} />}
           title="Your list is empty"
-          message="Add a recipe from Tonight or any recipe page to build your shopping list."
+          message="Add a recipe from Tonight, or build a plate, to start your shopping list."
         />
       </>
     );
@@ -69,7 +78,7 @@ export function ShoppingListPage() {
       />
 
       <div className="flex flex-col gap-5 p-4">
-        {/* Contributing recipes — removable. */}
+        {/* Contributing recipes (emerald) and plate components (amber) — removable. */}
         <div className="flex flex-wrap gap-1.5">
           {added.map(({ recipe }) => (
             <span
@@ -81,6 +90,21 @@ export function ShoppingListPage() {
                 aria-label={`Remove ${recipe.name}`}
                 onClick={() => void removeRecipe(recipe.id)}
                 className="flex h-5 w-5 items-center justify-center rounded-full active:bg-emerald-200"
+              >
+                <X size={13} />
+              </button>
+            </span>
+          ))}
+          {extras.map((name) => (
+            <span
+              key={name}
+              className="inline-flex items-center gap-1 rounded-full bg-amber-50 py-1 pl-3 pr-1 text-xs font-medium text-amber-700"
+            >
+              {name}
+              <button
+                aria-label={`Remove ${name}`}
+                onClick={() => void removeExtra(name)}
+                className="flex h-5 w-5 items-center justify-center rounded-full active:bg-amber-200"
               >
                 <X size={13} />
               </button>
@@ -138,7 +162,7 @@ export function ShoppingListPage() {
         onClose={() => setConfirmClear(false)}
       >
         <p className="mb-4 text-sm text-gray-600">
-          This removes all {added.length} recipe{added.length === 1 ? '' : 's'} and their items.
+          This removes everything on your list — all recipes, plate items, and their ingredients.
         </p>
         <div className="flex gap-2">
           <Button variant="secondary" className="flex-1" onClick={() => setConfirmClear(false)}>

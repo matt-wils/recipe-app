@@ -46,8 +46,15 @@ interface Bucket {
  * or some recipes giving no amount) collapse to a dominant value plus a
  * "+ more" / "from N recipes" annotation. Sections come back in CATEGORY_ORDER
  * with empties dropped, items sorted A→Z.
+ *
+ * `extras` are bare, amount-less item names (the components of a built plate);
+ * they fold into the same buckets, so a plate "Squash" merges with a recipe's
+ * "squash" into one line.
  */
-export function aggregateShoppingList(added: AddedRecipe[]): ShoppingSection[] {
+export function aggregateShoppingList(
+  added: AddedRecipe[],
+  extras: string[] = [],
+): ShoppingSection[] {
   const buckets = new Map<string, Bucket>();
 
   for (const { recipe, servings } of added) {
@@ -76,6 +83,25 @@ export function aggregateShoppingList(added: AddedRecipe[]): ShoppingSection[] {
         bucket.unitCounts.set(unit, (bucket.unitCounts.get(unit) ?? 0) + 1);
       }
     }
+  }
+
+  for (const raw of extras) {
+    const name = raw.trim();
+    if (!name) continue;
+    const key = normalize(name) || name.toLowerCase();
+    let bucket = buckets.get(key);
+    if (!bucket) {
+      bucket = {
+        label: name,
+        category: categorize(name),
+        unitTotals: new Map(),
+        unitCounts: new Map(),
+        noAmountCount: 0,
+        recipeIds: new Set(),
+      };
+      buckets.set(key, bucket);
+    }
+    bucket.noAmountCount += 1;
   }
 
   const byCategory = new Map<Category, ShoppingItem[]>();
