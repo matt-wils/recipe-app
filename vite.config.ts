@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { recipeLibrary } from './plugins/vite-plugin-recipe-library';
+import { plateLibrary } from './plugins/vite-plugin-plate-library';
 
 // base must match the GitHub Pages repo path: https://<user>.github.io/recipe-app/
 export default defineConfig({
@@ -11,6 +12,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     recipeLibrary(),
+    plateLibrary(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['icons/*.png'],

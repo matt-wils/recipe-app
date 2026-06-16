@@ -15,6 +15,7 @@ import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { loadRecipes } from '../plugins/recipe-loader';
+import { loadPlates } from '../plugins/plate-loader';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const PHOTO_DIR = join(root, 'public', 'recipe-photos');
@@ -32,16 +33,33 @@ function main(): number {
     return 1;
   }
 
+  // Same validator the build uses for the build-a-plate component library.
+  let components;
+  try {
+    components = loadPlates(readFileSync(join(root, 'plates.yaml'), 'utf8'));
+  } catch (err) {
+    console.error(`✗ plates.yaml failed to load:\n  ${(err as Error).message}`);
+    return 1;
+  }
+
   const problems: string[] = [];
 
-  // Invariant the loader doesn't enforce: a referenced photo must exist on disk,
-  // or the recipe renders a broken image in production.
+  // Invariant the loaders don't enforce: a referenced photo must exist on disk,
+  // or the recipe/component renders a broken image in production. Plate photos
+  // join the `referenced` set so they're not flagged as orphans below.
   const referenced = new Set<string>();
   for (const r of recipes) {
     if (!r.photo) continue;
     referenced.add(r.photo);
     if (!existsSync(join(PHOTO_DIR, r.photo))) {
       problems.push(`recipe "${r.id}" references missing photo public/recipe-photos/${r.photo}`);
+    }
+  }
+  for (const c of components) {
+    if (!c.photo) continue;
+    referenced.add(c.photo);
+    if (!existsSync(join(PHOTO_DIR, c.photo))) {
+      problems.push(`component "${c.id}" references missing photo public/recipe-photos/${c.photo}`);
     }
   }
 
@@ -66,6 +84,7 @@ function main(): number {
   }
 
   console.log(`Recipes: ${recipes.length}`);
+  console.log(`Plate components: ${components.length}`);
   console.log(`Photos: ${referenced.size} referenced, ${onDisk.length} on disk`);
   console.log(`GERD: ${[...gerdCounts].map(([k, v]) => `${k}=${v}`).join(', ') || '(none)'}`);
   console.log(`Tags in use: ${tagCounts.size}`);
