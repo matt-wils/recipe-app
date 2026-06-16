@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { matchesFilters, weightFor, pickRecipe, NO_FILTERS } from '../shuffle';
+import { matchesFilters, weightFor, pickRecipe, pickRandom, NO_FILTERS } from '../shuffle';
 import type { Recipe } from '../../types';
 
 function recipe(id: string, tags: string[] = [], gerd?: Recipe['gerd']): Recipe {
@@ -29,6 +29,19 @@ describe('matchesFilters', () => {
     expect(matchesFilters(r, { tags: [], gerd: ['high'] })).toBe(true);
     expect(matchesFilters(r, { tags: [], gerd: ['low'] })).toBe(false);
     expect(matchesFilters(recipe('b'), { tags: [], gerd: ['high'] })).toBe(false);
+  });
+});
+
+describe('pickRandom', () => {
+  it('returns undefined for an empty list', () => {
+    expect(pickRandom([])).toBeUndefined();
+  });
+
+  it('maps the rng across the list and stays in bounds', () => {
+    const items = ['a', 'b', 'c', 'd'];
+    expect(pickRandom(items, () => 0)).toBe('a');
+    expect(pickRandom(items, () => 0.5)).toBe('c'); // floor(0.5*4)=2
+    expect(pickRandom(items, () => 0.999)).toBe('d'); // floor(3.996)=3
   });
 });
 
