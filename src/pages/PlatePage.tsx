@@ -88,9 +88,10 @@ const PlateReel = forwardRef<ReelHandle, ReelProps>(function PlateReel(
 
   return (
     <div className="relative flex-1">
-      {/* center highlight band */}
+      {/* center highlight band — sits behind the items (relative z-10 below) so
+          the centered name stays readable on top of it. */}
       <div
-        className="pointer-events-none absolute inset-x-0 top-1/2 z-10 -translate-y-1/2"
+        className="pointer-events-none absolute inset-x-0 top-1/2 z-0 -translate-y-1/2"
         style={{ height: ITEM_H }}
       >
         <div className="mx-1 h-full rounded-lg bg-emerald-50 ring-1 ring-emerald-300" />
@@ -98,7 +99,7 @@ const PlateReel = forwardRef<ReelHandle, ReelProps>(function PlateReel(
       <div
         ref={elRef}
         onScroll={handleScroll}
-        className="no-scrollbar snap-y snap-mandatory overflow-y-auto"
+        className="no-scrollbar relative z-10 snap-y snap-mandatory overflow-y-auto"
         style={{ height: COL_H }}
       >
         <div style={{ height: PAD }} />
@@ -124,8 +125,7 @@ const PlateReel = forwardRef<ReelHandle, ReelProps>(function PlateReel(
 });
 
 export function PlatePage() {
-  const { addPlate } = useShoppingList();
-  const [added, setAdded] = useState(false);
+  const { addPlate, removeExtra, extras } = useShoppingList();
 
   const bySlot = useMemo(() => {
     const map = {} as Record<PlateSlot, PlateComponent[]>;
@@ -147,7 +147,6 @@ export function PlatePage() {
 
   const select = useCallback((slot: PlateSlot, id: string) => {
     setSelected((prev) => (prev[slot] === id ? prev : { ...prev, [slot]: id }));
-    setAdded(false);
   }, []);
 
   const shuffle = useCallback(() => {
@@ -163,9 +162,16 @@ export function PlatePage() {
     (c): c is PlateComponent => Boolean(c),
   );
 
-  const addToList = async () => {
-    await addPlate(chosen.map((c) => c.name));
-    setAdded(true);
+  // The whole plate is "on the list" once every chosen component is an extra.
+  // Toggling then mirrors the rest of the app (add when off, remove when on).
+  const onList = chosen.length > 0 && chosen.every((c) => extras.includes(c.name));
+
+  const toggleList = async () => {
+    if (onList) {
+      for (const c of chosen) await removeExtra(c.name);
+    } else {
+      await addPlate(chosen.map((c) => c.name));
+    }
   };
 
   return (
@@ -222,15 +228,18 @@ export function PlatePage() {
             </Link>
           ))}
           <button
-            onClick={() => void addToList()}
+            onClick={() => void toggleList()}
             disabled={chosen.length === 0}
+            aria-pressed={onList}
             className={`mt-1 flex h-11 items-center justify-center gap-1.5 rounded-xl font-semibold text-white disabled:opacity-50 ${
-              added ? 'bg-emerald-700' : 'bg-emerald-600 active:bg-emerald-700'
+              onList
+                ? 'bg-emerald-700 active:bg-emerald-800'
+                : 'bg-emerald-600 active:bg-emerald-700'
             }`}
           >
-            {added ? (
+            {onList ? (
               <>
-                <Check size={18} /> Added to list
+                <Check size={18} /> On your list — tap to remove
               </>
             ) : (
               <>
