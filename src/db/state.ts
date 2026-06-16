@@ -1,4 +1,5 @@
 import { getMeta, setMeta } from './meta';
+import { normalize } from '../utils/normalize';
 
 /**
  * Per-device state about the (read-only) recipe library: favorites and
@@ -10,6 +11,7 @@ const FAVORITES_KEY = 'favorites';
 const LAST_COOKED_KEY = 'lastCooked';
 const SHOPPING_LIST_KEY = 'shoppingList';
 const SHOPPING_CHECKED_KEY = 'shoppingListChecked';
+const SHOPPING_EXTRAS_KEY = 'shoppingListExtras';
 
 export async function getFavorites(): Promise<Set<string>> {
   const ids = (await getMeta<string[]>(FAVORITES_KEY)) ?? [];
@@ -75,10 +77,48 @@ export async function removeRecipeFromShoppingList(id: string): Promise<Shopping
   return next;
 }
 
-/** Empty the list and clear any checked-off items. */
+/** Empty the list (recipes + plate extras) and clear any checked-off items. */
 export async function clearShoppingList(): Promise<void> {
   await setMeta(SHOPPING_LIST_KEY, []);
+  await setMeta(SHOPPING_EXTRAS_KEY, []);
   await setMeta(SHOPPING_CHECKED_KEY, []);
+}
+
+/**
+ * Ad-hoc shopping items that don't belong to a recipe — the named components of
+ * a built plate (e.g. "Chicken", "Rice", "Broccoli"). Stored as bare display
+ * names; aggregated alongside recipe ingredients on render (src/utils/shopping).
+ * Still per-device state, not a recipe write path.
+ */
+function extrasKey(name: string): string {
+  return normalize(name) || name.trim().toLowerCase();
+}
+
+export async function getShoppingExtras(): Promise<string[]> {
+  return (await getMeta<string[]>(SHOPPING_EXTRAS_KEY)) ?? [];
+}
+
+/** Add plate component names, skipping any already present (by normalized name). */
+export async function addPlateToShoppingList(names: string[]): Promise<string[]> {
+  const next = await getShoppingExtras();
+  const seen = new Set(next.map(extrasKey));
+  for (const raw of names) {
+    const name = raw.trim();
+    if (!name) continue;
+    const key = extrasKey(name);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    next.push(name);
+  }
+  await setMeta(SHOPPING_EXTRAS_KEY, next);
+  return next;
+}
+
+export async function removeShoppingExtra(name: string): Promise<string[]> {
+  const key = extrasKey(name);
+  const next = (await getShoppingExtras()).filter((n) => extrasKey(n) !== key);
+  await setMeta(SHOPPING_EXTRAS_KEY, next);
+  return next;
 }
 
 export async function getCheckedItems(): Promise<Set<string>> {

@@ -69,6 +69,34 @@ describe('aggregateShoppingList', () => {
     expect(item(sections, 'chicken')?.summary).toBe('2 lb');
   });
 
+  it('folds plate extras in as bare items in the right section', () => {
+    const sections = aggregateShoppingList([], ['Broccoli', 'Rice']);
+    expect(item(sections, 'Broccoli')?.summary).toBe('');
+    const produce = sections.find((s) => s.category === 'Produce');
+    const pantry = sections.find((s) => s.category === 'Pantry');
+    expect(produce?.items.map((i) => i.label)).toEqual(['Broccoli']);
+    expect(pantry?.items.map((i) => i.label)).toEqual(['Rice']);
+  });
+
+  it('merges a plate extra with a like-named recipe ingredient into one line', () => {
+    const sections = aggregateShoppingList(
+      [{ recipe: recipe('a', [{ name: 'squash', amount: 1, unit: 'lb' }]), servings: 4 }],
+      ['Squash'],
+    );
+    const merged = sections.flatMap((s) => s.items).filter((i) => i.key === 'squash');
+    expect(merged).toHaveLength(1);
+    // recipe was seen first, so its label and amount lead; the extra adds "+ more".
+    expect(merged[0].label).toBe('squash');
+    expect(merged[0].summary).toBe('1 lb + more');
+  });
+
+  it('defaults extras to empty, preserving recipe-only behavior', () => {
+    const sections = aggregateShoppingList([
+      { recipe: recipe('a', [{ name: 'chicken', amount: 1, unit: 'lb' }]), servings: 4 },
+    ]);
+    expect(item(sections, 'chicken')?.summary).toBe('1 lb');
+  });
+
   it('returns sections in store order, dropping empty ones, items sorted A→Z', () => {
     const sections = aggregateShoppingList([
       {
