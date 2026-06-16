@@ -39,7 +39,6 @@ export interface PlateComponent {
   id: string; // slug derived from name
   name: string;
   slot: PlateSlot;
-  photo?: string; // filename under public/recipe-photos/
   methods: CookingMethod[]; // a few ways to cook it
 }
 

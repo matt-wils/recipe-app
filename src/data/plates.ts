@@ -25,19 +25,3 @@ export function getPlateComponents(slot?: PlateSlot): PlateComponent[] {
 export function getComponent(id: string): PlateComponent | undefined {
   return byId.get(id);
 }
-
-// Per-slot placeholder artwork (public/recipe-photos/placeholders/) shown for
-// components without their own `photo:`. `vegetable` reuses the existing veg.svg.
-const SLOT_PLACEHOLDER: Record<PlateSlot, string> = {
-  protein: 'protein',
-  carb: 'carb',
-  vegetable: 'veg',
-};
-
-/** A component's own photo if it has one, otherwise its per-slot placeholder. */
-export function componentPhotoUrl(component: PlateComponent): string {
-  if (component.photo) {
-    return `${import.meta.env.BASE_URL}recipe-photos/${component.photo}`;
-  }
-  return `${import.meta.env.BASE_URL}recipe-photos/placeholders/${SLOT_PLACEHOLDER[component.slot]}.svg`;
-}

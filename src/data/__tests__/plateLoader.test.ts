@@ -37,17 +37,6 @@ proteins:
     expect(c.id).toBe('chicken-breast'); // id slug is unaffected
   });
 
-  it('keeps an optional photo', () => {
-    const [c] = loadPlates(`
-proteins:
-  - name: Salmon
-    photo: salmon.jpg
-    methods:
-      - { name: Roasted, how: "400F 12 min." }
-`);
-    expect(c.photo).toBe('salmon.jpg');
-  });
-
   it('returns [] for empty input', () => {
     expect(loadPlates('')).toEqual([]);
   });

@@ -1,9 +1,9 @@
 import { useParams } from 'react-router-dom';
 import { PageHeader } from '../components/layout/PageHeader';
 import { EmptyState } from '../components/ui/EmptyState';
-import { getComponent, componentPhotoUrl, SLOT_LABELS } from '../data/plates';
+import { getComponent, SLOT_LABELS } from '../data/plates';
 
-/** A build-a-plate component's cooking-reference card: photo + a few ways to cook it. */
+/** A build-a-plate component's cooking-reference card: a few ways to cook it. */
 export function IngredientDetailPage() {
   const { id } = useParams();
   const component = id ? getComponent(id) : undefined;
@@ -21,12 +21,6 @@ export function IngredientDetailPage() {
     <>
       <PageHeader title={component.name} back />
       <div className="flex flex-col gap-5 p-4">
-        <img
-          src={componentPhotoUrl(component)}
-          alt={component.name}
-          className="h-56 w-full rounded-xl object-cover"
-        />
-
         <span className="w-fit rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700">
           {SLOT_LABELS[component.slot]}
         </span>
