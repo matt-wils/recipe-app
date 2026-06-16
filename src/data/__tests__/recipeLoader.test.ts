@@ -14,7 +14,7 @@ describe('loadRecipes', () => {
   ingredients: [white rice]
 `);
     expect(r.id).toBe('plain-rice');
-    expect(r.ingredients).toEqual([{ name: 'white rice' }]);
+    expect(r.ingredients).toEqual([{ name: 'White rice' }]); // sentence-cased for display
     expect(r.servings).toBe(4); // default
     expect(r.tags).toEqual([]);
   });
@@ -34,7 +34,8 @@ describe('loadRecipes', () => {
 `);
     expect(r.id).toBe('my-tacos');
     expect(r.notes).toBe('Brown beef.');
-    expect(r.ingredients[1]).toEqual({ name: 'cheddar', amount: 1, unit: 'cup' });
+    expect(r.ingredients[0]).toEqual({ name: 'Ground beef' });
+    expect(r.ingredients[1]).toEqual({ name: 'Cheddar', amount: 1, unit: 'cup' });
     expect(r.gerd).toBe('low');
     expect(r.macros).toEqual({ calories: 500, protein: 30 });
     expect(r.servings).toBe(2);

@@ -4,6 +4,7 @@ import { PageHeader } from '../components/layout/PageHeader';
 import { EmptyState } from '../components/ui/EmptyState';
 import { useRecipes } from '../hooks/useRecipes';
 import { computeIngredientFrequency } from '../utils/matching';
+import { capitalize } from '../utils/capitalize';
 
 export function CommonIngredientsPage() {
   const { recipes } = useRecipes();
@@ -24,7 +25,7 @@ export function CommonIngredientsPage() {
           {freq.map((f) => (
             <li key={f.name} className="rounded-xl bg-white p-3 shadow-sm">
               <div className="flex items-center justify-between gap-2">
-                <span className="font-medium capitalize">{f.name}</span>
+                <span className="font-medium">{capitalize(f.name)}</span>
                 <span className="shrink-0 text-sm text-gray-500">
                   {f.count} recipe{f.count === 1 ? '' : 's'}
                 </span>

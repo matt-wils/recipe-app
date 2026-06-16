@@ -1,6 +1,7 @@
 import yaml from 'js-yaml';
 import type { CookingMethod, PlateComponent, PlateSlot } from '../src/types';
 import { slugify } from './recipe-loader';
+import { capitalize } from '../src/utils/capitalize';
 
 /**
  * Pure transform + validation from raw `plates.yaml` text to the runtime
@@ -56,7 +57,7 @@ function parseComponent(
   }
   const methods = obj.methods.map((m) => parseMethod(m, slotKey, name));
 
-  const component: PlateComponent = { id, name, slot, methods };
+  const component: PlateComponent = { id, name: capitalize(name), slot, methods };
   if (typeof obj.photo === 'string' && obj.photo.trim()) {
     component.photo = obj.photo.trim();
   }

@@ -1,6 +1,7 @@
 import yaml from 'js-yaml';
 import type { Ingredient, Recipe } from '../src/types';
 import { ALLOWED_TAGS, GERD_LEVELS } from '../src/data/tags';
+import { capitalize } from '../src/utils/capitalize';
 
 /**
  * Pure transform + validation from raw `recipes.yaml` text to the runtime
@@ -26,13 +27,13 @@ function parseIngredient(raw: unknown, index: number): Ingredient {
   if (typeof raw === 'string') {
     const name = raw.trim();
     if (!name) fail(index, 'has an empty ingredient');
-    return { name };
+    return { name: capitalize(name) };
   }
   if (raw && typeof raw === 'object') {
     const obj = raw as Record<string, unknown>;
     const name = typeof obj.name === 'string' ? obj.name.trim() : '';
     if (!name) fail(index, 'has an ingredient missing a name');
-    const out: Ingredient = { name };
+    const out: Ingredient = { name: capitalize(name) };
     if (obj.amount != null) {
       if (typeof obj.amount !== 'number' || Number.isNaN(obj.amount)) {
         fail(index, `ingredient "${name}" has a non-numeric amount`);
