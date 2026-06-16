@@ -1,8 +1,7 @@
 # Build-a-plate components — the simple protein / carb / vegetable building
 # blocks for an ad-hoc meal, each with a few quick ways to cook it (a grocery-
 # store-card style reference). These are NOT recipes (see recipes.yaml); they're
-# validated at build time by plugins/plate-loader.ts. Add a `photo:` (a file
-# under public/recipe-photos/) to override the per-slot placeholder.
+# validated at build time by plugins/plate-loader.ts.
 
 proteins:
   - name: Chicken breast

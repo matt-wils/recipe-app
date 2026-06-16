@@ -10,7 +10,7 @@ import { capitalize } from '../src/utils/capitalize';
  * mirroring plugins/recipe-loader.ts.
  *
  * Shape: a top-level mapping of `proteins`/`carbs`/`vegetables`, each a list of
- * components { name, photo?, methods: [{ name, how }] }.
+ * components { name, methods: [{ name, how }] }.
  */
 
 const SLOTS: { key: string; slot: PlateSlot }[] = [
@@ -57,11 +57,7 @@ function parseComponent(
   }
   const methods = obj.methods.map((m) => parseMethod(m, slotKey, name));
 
-  const component: PlateComponent = { id, name: capitalize(name), slot, methods };
-  if (typeof obj.photo === 'string' && obj.photo.trim()) {
-    component.photo = obj.photo.trim();
-  }
-  return component;
+  return { id, name: capitalize(name), slot, methods };
 }
 
 export function loadPlates(yamlText: string): PlateComponent[] {
