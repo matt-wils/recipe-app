@@ -26,6 +26,17 @@ vegetables:
     ]);
   });
 
+  it('sentence-cases a lowercase component name for display', () => {
+    const [c] = loadPlates(`
+proteins:
+  - name: chicken breast
+    methods:
+      - { name: Baked, how: "400F 22 min." }
+`);
+    expect(c.name).toBe('Chicken breast');
+    expect(c.id).toBe('chicken-breast'); // id slug is unaffected
+  });
+
   it('keeps an optional photo', () => {
     const [c] = loadPlates(`
 proteins:
