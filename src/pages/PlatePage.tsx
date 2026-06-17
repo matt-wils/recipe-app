@@ -94,7 +94,7 @@ const PlateReel = forwardRef<ReelHandle, ReelProps>(function PlateReel(
         className="pointer-events-none absolute inset-x-0 top-1/2 z-0 -translate-y-1/2"
         style={{ height: ITEM_H }}
       >
-        <div className="mx-2 h-full rounded-lg bg-emerald-50 ring-1 ring-emerald-300" />
+        <div className="h-full rounded-lg bg-emerald-50 ring-1 ring-emerald-300" />
       </div>
       <div
         ref={elRef}
@@ -110,7 +110,7 @@ const PlateReel = forwardRef<ReelHandle, ReelProps>(function PlateReel(
               onSelect(c.id);
               scrollToIndex(i, true);
             }}
-            className={`flex w-full snap-center items-center justify-center px-1 text-center text-sm leading-tight ${
+            className={`flex w-full snap-center items-center justify-center whitespace-nowrap px-1 text-center text-xs leading-tight ${
               c.id === selectedId ? 'font-semibold text-gray-900' : 'text-gray-400'
             }`}
             style={{ height: ITEM_H }}
