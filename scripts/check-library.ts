@@ -45,21 +45,15 @@ function main(): number {
   const problems: string[] = [];
 
   // Invariant the loaders don't enforce: a referenced photo must exist on disk,
-  // or the recipe/component renders a broken image in production. Plate photos
-  // join the `referenced` set so they're not flagged as orphans below.
+  // or the recipe renders a broken image in production. Only recipes carry photos
+  // (plate components are text-only); referenced files are exempt from the orphan
+  // scan below.
   const referenced = new Set<string>();
   for (const r of recipes) {
     if (!r.photo) continue;
     referenced.add(r.photo);
     if (!existsSync(join(PHOTO_DIR, r.photo))) {
       problems.push(`recipe "${r.id}" references missing photo public/recipe-photos/${r.photo}`);
-    }
-  }
-  for (const c of components) {
-    if (!c.photo) continue;
-    referenced.add(c.photo);
-    if (!existsSync(join(PHOTO_DIR, c.photo))) {
-      problems.push(`component "${c.id}" references missing photo public/recipe-photos/${c.photo}`);
     }
   }
 
