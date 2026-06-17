@@ -15,6 +15,8 @@ server and no account. Designed for free static hosting on GitHub Pages.
 - **Serving scaler** — adjust servings and ingredient amounts recompute live
 - **"What can I make?"** — enter ingredients you have; recipes are ranked by match %
 - **Common ingredients** — see which ingredients appear across the most recipes
+- **Build a plate** — spin up a simple protein + carb + veg (authored in `plates.yaml`),
+  with a few quick ways to cook each ingredient, then add the plate to your shopping list
 - **Shopping list** — add recipes from Tonight, Browse, or a recipe page; ingredients
   are grouped by store section and like items are merged with their amounts summed
 - Installable to the iPhone home screen; works offline
@@ -35,7 +37,7 @@ npm run test:coverage  # tests + coverage gate
 npm run lint           # ESLint
 npm run typecheck      # tsc --noEmit
 npm run format         # Prettier --write
-npm run check:library  # validate recipes.yaml
+npm run check:library  # validate recipes.yaml + plates.yaml
 npm run build          # type-check + production build
 npm run preview        # serve the production build locally
 ```
@@ -58,7 +60,7 @@ resets your shuffle weighting, favorites, and shopping list, not any recipes.
 Validate the library locally before pushing:
 
 ```bash
-npm run check:library   # re-runs the build's validator over recipes.yaml
+npm run check:library   # re-runs the build's validator over recipes.yaml + plates.yaml
 ```
 
 ## Deploy (GitHub Pages)

@@ -11,6 +11,12 @@ IndexedDB (via `idb`).
   and exposed through `src/data/library.ts`. There is **no** in-app create/edit/delete
   and recipes are **not** stored in IndexedDB (this replaced the old local recipe
   store — commit `95a7beb`). Don't reintroduce a recipe write path.
+- **Build-a-plate components are a second read-only git-authored library.** They live in
+  `plates.yaml` (simple protein/carb/veg building blocks, each with a few quick cooking
+  methods), are validated at build time by `plugins/plate-loader.ts::loadPlates`, and are
+  exposed through `src/data/plates.ts` (powers `PlatePage` + `IngredientDetailPage`). A
+  component is just `{ name, methods }` — there are **no** photos (the old per-slot
+  placeholder artwork was removed); don't reintroduce a `photo:` field or an in-app write path.
 - **IndexedDB holds only per-device state** — last-cooked timestamps, favorites, and
   the shopping list (`src/db/state.ts`), plus the backup-reminder meta. It's a derived
   cache, not a source of truth: losing it resets shuffle weighting/filters, never a recipe.
@@ -113,6 +119,9 @@ React / Vite:
   `public/recipe-photos/placeholders/`). The bundled real photos were sourced by
   `scripts/fetch-photos.py` (Wikipedia/Wikimedia, recorded in `recipe-photos/CREDITS.md`) — re-run
   it to add more, and keep CREDITS in sync for license attribution.
+- **Add/change a plate component** → edit `plates.yaml` (under `proteins`/`carbs`/`vegetables`,
+  each `{ name, methods: [{ name, how }] }`); `plugins/plate-loader.ts` validates it and the build
+  fails loud on a malformed entry. No photos — `IngredientDetailPage` is text-only.
 - **Add a page/route** → component in `src/pages/`, wire the route in `src/App.tsx`, add nav in
   `src/components/layout/BottomNav.tsx`.
 - **Add per-device state** → a keyed helper in `src/db/state.ts` over `getMeta`/`setMeta`; expose
