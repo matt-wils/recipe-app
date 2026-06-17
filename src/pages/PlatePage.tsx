@@ -94,7 +94,7 @@ const PlateReel = forwardRef<ReelHandle, ReelProps>(function PlateReel(
         className="pointer-events-none absolute inset-x-0 top-1/2 z-0 -translate-y-1/2"
         style={{ height: ITEM_H }}
       >
-        <div className="mx-1 h-full rounded-lg bg-emerald-50 ring-1 ring-emerald-300" />
+        <div className="mx-2 h-full rounded-lg bg-emerald-50 ring-1 ring-emerald-300" />
       </div>
       <div
         ref={elRef}
