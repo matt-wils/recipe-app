@@ -49,7 +49,8 @@ export function getDb(): Promise<IDBPDatabase<RecipeDB>> {
 
 /**
  * Best-effort request to exempt this origin from storage eviction.
- * iOS may decline; the JSON backup remains the real source of truth.
+ * iOS may decline; per-device state (shuffle weighting, favorites, shopping
+ * list) is then lost on eviction. Recipes live in git, so they're never at risk.
  * Safe to call repeatedly. Returns whether storage is persisted.
  */
 export async function requestPersistentStorage(): Promise<boolean> {
