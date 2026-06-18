@@ -18,7 +18,7 @@ IndexedDB (via `idb`).
   component is just `{ name, methods }` — there are **no** photos (the old per-slot
   placeholder artwork was removed); don't reintroduce a `photo:` field or an in-app write path.
 - **IndexedDB holds only per-device state** — last-cooked timestamps, favorites, and
-  the shopping list (`src/db/state.ts`), plus the backup-reminder meta. It's a derived
+  the shopping list (`src/db/state.ts`). It's a derived
   cache, not a source of truth: losing it resets shuffle weighting/filters, never a recipe.
 - **The shopping list stores recipe _references_, not materialized items.** Its meta keys
   (`shoppingList` = `{ id, servings }[]`, `shoppingListChecked` = normalized-name keys)
