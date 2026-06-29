@@ -54,7 +54,7 @@
     "fake-indexeddb": "^6.0.0",
     "globals": "^17.7.0",
     "husky": "^9.1.7",
-    "js-yaml": "^4.2.0",
+    "js-yaml": "^5.2.0",
     "jsdom": "^29.1.1",
     "lint-staged": "^17.0.8",
     "prettier": "^3.9.1",
