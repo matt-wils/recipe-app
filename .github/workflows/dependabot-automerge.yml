@@ -6,12 +6,10 @@ name: Dependabot Auto-merge
 #   write access — only pull_request_target provides that. This is the standard
 #   Dependabot auto-merge pattern endorsed by GitHub Actions docs.
 #
-# Policy: auto-merge EVERY Dependabot PR (any update type, prod or dev) once CI
-# is green. No semver gate — branch protection's required `ci` check is the only
-# guard, so a bump that breaks lint/types/tests/build can never land. Coupled
-# packages (react/react-dom, vitest/coverage-v8) are grouped in dependabot.yml
-# so a major bump arrives as one installable PR rather than ERESOLVE-conflicting
-# halves.
+# Policy: dependabot.yml disables routine version-update PRs, so Dependabot PRs
+# are targeted security fixes. Queue each one for auto-merge; branch protection's
+# required `ci` check is the guard, so a fix that breaks install, audit, lint,
+# types, tests, or build cannot land.
 #
 # Mitigations against pull_request_target abuse:
 #   1. Hard actor check (if: github.actor == 'dependabot[bot]') — skips the job
@@ -25,7 +23,7 @@ name: Dependabot Auto-merge
 #      gh CLI, so untrusted PR code never executes in this elevated context.
 #
 # Auto-merge only *queues* the merge: the branch-protected `ci` check must pass
-# first, so a dependency bump that breaks lint/types/tests/build never lands.
+# first, so a security fix that breaks validation never lands.
 on:
   pull_request_target:
     types: [opened, synchronize, reopened]
@@ -40,7 +38,7 @@ jobs:
     # Hard gate: skip entirely for non-Dependabot PRs.
     if: github.actor == 'dependabot[bot]'
     steps:
-      # Queue auto-merge — GitHub merges only after all required CI checks pass.
+      # Queue the security fix — GitHub merges only after required CI passes.
       - name: Enable auto-merge
         run: gh pr merge --auto --squash "$PR_URL"
         env:

@@ -1,7 +1,10 @@
 version: 2
 
 updates:
-  # Node app — reads package.json and package-lock.json at the repo root.
+  # Security-only policy: keep these ecosystem entries so Dependabot security
+  # updates can use this configuration, but disable routine version-update PRs.
+  # Security updates are raised when an advisory applies; this schedule is only
+  # a required field and does not delay them.
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
@@ -9,32 +12,9 @@ updates:
       day: 'monday'
       time: '06:00'
       timezone: 'America/Chicago'
-    groups:
-      # Interdependent packages that MUST move version together — Dependabot
-      # otherwise splits a major bump into one PR per package, and each half
-      # fails `npm ci` with an ERESOLVE peer conflict (react@19 needs
-      # react-dom@19; @vitest/coverage-v8 pins an exact `peer vitest`). These
-      # groups carry NO update-types filter, so they bundle major bumps too —
-      # the whole point is to keep the coupled set in a single installable PR.
-      react:
-        patterns:
-          - 'react'
-          - 'react-dom'
-          - '@types/react'
-          - '@types/react-dom'
-      vitest:
-        patterns:
-          - 'vitest'
-          - '@vitest/*'
-      # Everything else: fold routine minor/patch bumps into one PR. Major
-      # bumps of other packages still open as individual PRs for review.
-      npm-minor-and-patch:
-        applies-to: version-updates
-        update-types: ['minor', 'patch']
-    labels: ['dependencies', 'javascript']
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 0
 
-  # GitHub Actions — scans .github/workflows/ automatically.
+  # Apply the same security-only policy to actions used by the workflows.
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
@@ -42,9 +22,4 @@ updates:
       day: 'monday'
       time: '06:00'
       timezone: 'America/Chicago'
-    groups:
-      actions-minor-and-patch:
-        applies-to: version-updates
-        update-types: ['minor', 'patch']
-    labels: ['dependencies', 'github-actions']
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 0
