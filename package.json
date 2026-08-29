@@ -26,6 +26,9 @@
       "prettier --write"
     ]
   },
+  "overrides": {
+    "qs": "^6.15.3"
+  },
   "dependencies": {
     "idb": "^8.0.0",
     "lucide-react": "^1.33.0",
@@ -35,8 +38,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@stryker-mutator/core": "^9.6.1",
-    "@stryker-mutator/vitest-runner": "^9.6.1",
+    "@stryker-mutator/core": "^10.0.0",
+    "@stryker-mutator/vitest-runner": "^10.0.0",
     "@tailwindcss/vite": "^4.3.3",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.1.0",
@@ -54,7 +57,7 @@
     "fake-indexeddb": "^6.0.0",
     "globals": "^17.11.0",
     "husky": "^9.1.7",
-    "js-yaml": "^4.2.0",
+    "js-yaml": "^4.3.2",
     "jsdom": "^30.0.1",
     "lint-staged": "^17.3.0",
     "prettier": "^3.9.6",
